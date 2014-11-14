@@ -11,6 +11,9 @@ CERGO_GPS::CERGO_GPS(int debug_level)
     Lattitude =0;
     Longitude = 0;
     Altitude = 0;
+    gps_fix = 0;
+    gps_sat_numbers = 0;
+
     DEBUG_LEVEL = debug_level;
 }
 
@@ -175,7 +178,7 @@ std::string CERGO_GPS::packatize()
 
     if(DEBUG_LEVEL >= 2 )
     {
-        Log->add("Lat : %d Long : %d Alt : %d",latitude,longitude,altitude );
+        Log->add("Lat : %ld Long : %ld Alt : %ld",latitude,longitude,altitude );
         Log->add("Fix = %d numsats= %d",gps_fix,gps_sat_numbers);
     }
 

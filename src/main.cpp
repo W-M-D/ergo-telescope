@@ -88,11 +88,13 @@ int main(int argc, char *argv[])
         Serial->data_read(data_list); // checks and reads incomming data
         while(!data_list.empty())
         {
+
+            data_int = GPS->Read_data( data_list);
             if(DEBUG_LEVEL >= MEDIUM)
             {
                 test_list = data_list;
             }
-            data_int = GPS->Read_data( data_list);
+
             if(data_int == FIX_DATA)
             {
                 if(DEBUG_LEVEL >= MEDIUM)
