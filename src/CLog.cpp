@@ -49,6 +49,7 @@ void CLog::raw_hex_add(std::deque <uint8_t> & data_list)
         data_stream << print_list.front() << " ";
         print_list.pop_front();
     }
+    hex_file << data_stream;
     hex_file.close();
 }
 // This function grabs the file offset of the last line that was sent.
