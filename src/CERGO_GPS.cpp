@@ -356,7 +356,7 @@ int CERGO_GPS::parse_ubx_gps(std::deque <uint8_t> & data_list)
             data_list.pop_front();//removes the ID
             data_list.pop_front();//removes length max
             data_list.pop_front();//removes length min
-            if((data_list[10] >= 0x02)&&(data_list[11]==0x01))
+            if((data_list[10] >= 0x02)&&(data_list[11]&0x01))
             {
                 gps_fix=data_list[10]; //valid position
                 gps_sat_numbers=data_list[47];                    //Number of sats...
