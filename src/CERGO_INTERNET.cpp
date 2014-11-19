@@ -68,6 +68,7 @@ void CERGO_INTERNET::manage_list()
         std::this_thread::sleep_for (std::chrono::seconds(1));
         if(check_archive)
         {
+            mtx.lock();
             check_archive = Log->archive_load(string_list);
             while(!string_list.empty())
             {
@@ -99,6 +100,8 @@ void CERGO_INTERNET::manage_list()
                     break;
                 }
             }
+            mtx.unlock();
+
         }
     }
 }

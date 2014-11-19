@@ -36,6 +36,18 @@ void CLog::data_add(std::string & date, std::string & time, std::string & unit_i
     data_file.close();
 }
 
+void CLog::raw_hex_add(std::deque <uint8_t> print_list)
+{
+    std::ofstream hex_file;
+    hex_file.open("/etc/ERGO/ERGO_HEX.log",std::ios_base::out | std::ios_base::app);
+    while(!print_list.empty())
+    {
+          std::cout.flags ( std::ios::right | std::ios::hex | std::ios::showbase );
+          hex_file << print_list.front();
+          print_list.pop_front();
+    }
+    hex_file.close();
+}
 // This function grabs the file offset of the last line that was sent.
 std::streamoff CLog::last_sent_line_get()
 {
@@ -109,12 +121,13 @@ bool CLog::is_empty(std::ifstream& data_in)
 
 void CLog::add(const char * text , ...)
 {
+    char log_buff[512] ;
+
     std::ofstream log_file;
     log_file.open ("/etc/ERGO/ERGO_LOG.log", std::ios_base::out | std::ios_base::app); //creates log
 
     va_list va_alist;  //formats log and places into buffer
-    char log_buff[512] ;
-    memset(log_buff, 0, sizeof(log_buff));
+    memset(log_buff, 0, sizeof(log_buff)/sizeof(char));
     va_start ( va_alist, text );
     vsnprintf( log_buff + strlen( log_buff ),511, text, va_alist );
     va_end( va_alist );

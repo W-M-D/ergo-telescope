@@ -11,9 +11,6 @@ CERGO_GPS::CERGO_GPS(int debug_level)
     Lattitude =0;
     Longitude = 0;
     Altitude = 0;
-    gps_fix = 0;
-    gps_sat_numbers = 0;
-
     DEBUG_LEVEL = debug_level;
 }
 
@@ -178,7 +175,7 @@ std::string CERGO_GPS::packatize()
 
     if(DEBUG_LEVEL >= 2 )
     {
-        Log->add("Lat : %ld Long : %ld Alt : %ld",latitude,longitude,altitude );
+        Log->add("Lat : %d Long : %d Alt : %d",latitude,longitude,altitude );
         Log->add("Fix = %d numsats= %d",gps_fix,gps_sat_numbers);
     }
 
@@ -359,7 +356,7 @@ int CERGO_GPS::parse_ubx_gps(std::deque <uint8_t> & data_list)
             data_list.pop_front();//removes the ID
             data_list.pop_front();//removes length max
             data_list.pop_front();//removes length min
-            if((data_list[10] >= 0x02)&&(data_list[11]&0x01))
+            if((data_list[10] >= 0x02)&&(data_list[11]==0x01))
             {
                 gps_fix=data_list[10]; //valid position
                 gps_sat_numbers=data_list[47];                    //Number of sats...

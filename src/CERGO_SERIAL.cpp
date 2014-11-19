@@ -17,6 +17,7 @@ CERGO_SERIAL::CERGO_SERIAL(int debug_level)
         Log->add("serial port %d \n\n",tty_fd);
 
     }
+    v_time = 5;
     while(!serial_init(9600))
     {
         sleep(60);
@@ -62,7 +63,7 @@ bool CERGO_SERIAL::serial_init(int baud)
     tio.c_lflag=0;
 
     tio.c_cc[VMIN]=30;
-    tio.c_cc[VTIME]=6;
+    tio.c_cc[VTIME]=v_time;
 
 
 
