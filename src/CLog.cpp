@@ -45,7 +45,7 @@ void CLog::raw_hex_add(std::deque <uint8_t> print_list)
     while(!print_list.empty())
     {
         std::cout.flags( std::ios::right | std::ios::hex | std::ios::showbase);
-        data_stream << print_list.front();
+        data_stream << print_list.front() << " ";
         print_list.pop_front();
     }
     hex_file << data_stream;
