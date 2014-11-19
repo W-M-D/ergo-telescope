@@ -48,7 +48,7 @@ bool CERGO_SERIAL::serial_init(int baud)
     tcgetattr(tty_fd, &tio);
     tcflush(tty_fd, TCIOFLUSH);
 
-    fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK);       // make the reads non-blocking
+    fcntl(STDIN_FILENO, F_SETFL, 0);       // make the reads non-blocking
     memset(&tio,0,sizeof(tio));
 
     tio.c_iflag=0;
@@ -58,15 +58,15 @@ bool CERGO_SERIAL::serial_init(int baud)
     tio.c_cflag |= CS8;
     tio.c_cflag &= ~PARENB;// no parity
     tio.c_cflag &= ~CSTOPB;// one stop bit
-
+  
     tio.c_lflag=0;
 
-    tio.c_cc[VMIN]=30;
-    tio.c_cc[VTIME]=6;
+    tio.c_cc[VMIN]=40;
+    tio.c_cc[VTIME]=10;
 
 
 
-    tty_fd=open(portName, O_RDWR |O_NONBLOCK);
+    tty_fd=open(portName, O_RDWR );
 
     if (baud == 9600)
     {
@@ -85,7 +85,7 @@ bool CERGO_SERIAL::serial_init(int baud)
 
     tcsetattr(tty_fd,TCSANOW,&tio);
     tcflush(tty_fd, TCIOFLUSH);
-    fcntl(tty_fd, F_SETFL, O_NONBLOCK);
+    fcntl(tty_fd, F_SETFL, 0);
 
     usleep( 1 * 1000 );
 

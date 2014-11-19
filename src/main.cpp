@@ -121,6 +121,7 @@ int main(int argc, char *argv[])
             }
             else if(data_int == INSUFFICIENT_DATA)
             {
+	        std::this_thread::sleep_for (std::chrono::milliseconds(100));
                 if(DEBUG_LEVEL >= HIGH)
                 {
                     print_list(test_list,"Not enough data!");
