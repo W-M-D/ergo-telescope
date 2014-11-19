@@ -43,7 +43,7 @@ void CLog::raw_hex_add(std::deque <uint8_t> & data_list)
     std::stringstream data_stream;
     print_list = data_list;
     hex_file.open("/etc/ERGO/ERGO_HEX.log",std::ios_base::out | std::ios_base::app);
-    std::cout.flags(std::ios::hex | std::ios::showbase);
+    hex_file.setf(std::ios::hex | std::ios::showbase);
     while(!print_list.empty())
     {
         hex_file << print_list.front() << " ";
