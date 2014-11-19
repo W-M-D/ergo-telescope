@@ -44,13 +44,11 @@ void CLog::raw_hex_add(std::deque <uint8_t> & data_list)
     print_list = data_list;
     hex_file.open("/etc/ERGO/ERGO_HEX.log",std::ios_base::out | std::ios_base::app);
     std::cout.flags(std::ios::hex | std::ios::showbase);
-
     while(!print_list.empty())
     {
-        data_stream << print_list.front() << " ";
+        hex_file << print_list.front() << " ";
         print_list.pop_front();
     }
-    hex_file << data_stream;
     hex_file.close();
 }
 // This function grabs the file offset of the last line that was sent.
