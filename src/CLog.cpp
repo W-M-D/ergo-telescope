@@ -33,6 +33,7 @@ void CLog::data_add(std::string & date, std::string & time, std::string & unit_i
     std::ofstream data_file;
     data_file.open("/etc/ERGO/ERGO_DATA.csv",std::ios_base::out | std::ios_base::app);
     data_file << date << ' ' << time << ' ' << unit_id << ' ' << lat << ' ' << lon << ' ' << alt << ' ' << nanoseconds << '\n';
+    data_file.flush();
     data_file.close();
 }
 
@@ -61,6 +62,7 @@ std::streamoff CLog::last_sent_line_get()
     data_file.open("/etc/ERGO/last_line");
     std::getline(data_file,test);
     last_sent_line = (atoll(test.c_str()));
+    data_file.sync();
     data_file.close();
     return last_sent_line;
 }
@@ -71,6 +73,7 @@ void CLog::last_sent_line_save(std::streamoff ls)
     std::ofstream data_file;
     data_file.open("/etc/ERGO/last_line");
     data_file << ls;
+    data_file.flush();
     data_file.close();
 }
 void CLog::reset_last_offset()
@@ -78,6 +81,7 @@ void CLog::reset_last_offset()
     std::ofstream data_file;
     data_file.open("/etc/ERGO/last_line");
     data_file << last_offset;
+    data_file.flush();
     data_file.close();
 }
 
@@ -112,6 +116,7 @@ bool CLog::archive_load(std::forward_list <std::string> &  data_list)
         {
             last_sent_line_save( g_int);
         }
+        data_in.sync();
     }
     data_in.close();
     return true;
