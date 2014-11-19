@@ -1,6 +1,6 @@
 #ifndef CERGO_GPIO_H
 #define CERGO_GPIO_H
-#include <CLog.h>
+#include "CLog.h"
 #include <thread>
 #include <chrono>
 class CERGO_GPIO
