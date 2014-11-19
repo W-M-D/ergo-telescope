@@ -36,7 +36,7 @@ void CLog::data_add(std::string & date, std::string & time, std::string & unit_i
     data_file.close();
 }
 
-void CLog::raw_hex_add(std::deque <uint8_t> print_list)
+void CLog::raw_hex_add(std::deque <uint8_t> & print_list)
 {
     std::ofstream hex_file;
     std::stringstream data_stream;
