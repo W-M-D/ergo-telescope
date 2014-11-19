@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
             if(DEBUG_LEVEL >= MEDIUM)
             {
                 test_list = data_list;
-                if(DEBUG_LEVEL == HIGH)
+                if(DEBUG_LEVEL >= HIGH)
                 {
                     Log->raw_hex_add(test_list);
                 }
