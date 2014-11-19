@@ -243,7 +243,7 @@ std::string CERGO_GPS::date_packatize()
     long  Mjd = GpsToMjd( wnR, towMsR/1000);
 
     if(DEBUG_LEVEL >=3)
-        Log->add("MJD = %ld \n",Mjd);
+        Log->add("MJD = %ld",Mjd);
 
     MjdToDate(Mjd, year, month, day);
 

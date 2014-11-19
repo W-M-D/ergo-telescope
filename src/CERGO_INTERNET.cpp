@@ -30,7 +30,7 @@ bool CERGO_INTERNET::send_string(const std::string & data_string)
 
     if(curl)
     {
-        if(DEBUG_LEVEL >= 3)
+        if(DEBUG_LEVEL >= 5)
         {
             Log->add("%s \n",sending_string.c_str());
         }
@@ -76,7 +76,7 @@ void CERGO_INTERNET::manage_list()
                 {
                     if(DEBUG_LEVEL >= 1)
                     {
-                        Log->add("Sent string : %s" , string_list.front().c_str());
+                        Log->add("Sent string : %s\n" , string_list.front().c_str());
                     }
                     if(internet_outage)
                     {
