@@ -36,13 +36,14 @@ void CLog::data_add(std::string & date, std::string & time, std::string & unit_i
     data_file.close();
 }
 
-void CLog::raw_hex_add(std::deque <uint8_t> & print_list)
+void CLog::raw_hex_add(std::deque <uint8_t> & data_list)
 {
+    std::deque <uint8_t> print_list;
     std::ofstream hex_file;
     std::stringstream data_stream;
-
+    print_list = data_list;
     hex_file.open("/etc/ERGO/ERGO_HEX.log",std::ios_base::out | std::ios_base::app);
-    std::cout.flags( std::ios::right | std::ios::hex | std::ios::showbase);
+    std::cout.flags(std::ios::hex | std::ios::showbase);
 
     while(!print_list.empty())
     {
