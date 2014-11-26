@@ -69,6 +69,8 @@ int main(int argc, char *argv[])
     std::deque <uint8_t> test_list;
     int data_int = 0;
     std::chrono::milliseconds LIGHT_TIMER (100);
+    std::atomic<bool> true_atomic;
+    true_atomic = true;
 
     enum data_type_t {BAD_CHECKSUM=0,INSUFFICIENT_DATA=2,TIME_DATA,POS_DATA,BAD_DATA,FIX_DATA};
     enum debug_level_t {LOW=1,MEDIUM,HIGH};
@@ -114,7 +116,8 @@ int main(int argc, char *argv[])
             else if( data_int == TIME_DATA)//sends the serial data to be parsed
             {
                 GPS->packatize();
-                Internet->set_check_archive(true);
+
+                Internet->set_check_archive(true_atomic);
                 GPIO->pulse_light(LIGHT_TIMER,GPIO->GREEN_LEFT);
                 if(DEBUG_LEVEL >= HIGH)
                 {

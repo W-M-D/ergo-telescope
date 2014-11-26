@@ -507,12 +507,12 @@ double diffclock( long clock1, long clock2 )
 
 long CERGO_GPS::join_4_bytes(std::deque<uint8_t> & data_list)
 {
-    union
+    union long_union
     {
         long dword;
         uint8_t  byte[4];
-    } long_union;
-    memset(&long_union, 0, sizeof(long_union));
+        long_union() {memset(this, 0, sizeof(long_union)); }
+    }long_union;
 
     for(int i = 0; i < 4; i++)
     {

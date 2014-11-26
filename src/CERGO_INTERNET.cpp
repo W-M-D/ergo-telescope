@@ -94,7 +94,7 @@ void CERGO_INTERNET::manage_list()
                         internet_connection = false;
                         internet_outage = true;
 
-                        GPIO->setval_gpio(true,GPIO->YELLOW_MIDDLE);
+                        GPIO->setval_gpio(false,GPIO->YELLOW_MIDDLE);
                         Log->add("ERROR: COULD NOT SEND STRING");
                     }
                     break;
