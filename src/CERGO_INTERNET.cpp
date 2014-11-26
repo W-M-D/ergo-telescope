@@ -66,8 +66,7 @@ void CERGO_INTERNET::manage_list()
     while(true)
     {
         std::this_thread::sleep_for (std::chrono::seconds(1));
-        if(check_archive)
-        {
+
             mtx.lock();
             check_archive = Log->archive_load(string_list);
             while(!string_list.empty())
@@ -80,10 +79,10 @@ void CERGO_INTERNET::manage_list()
                     }
                     if(internet_outage)
                     {
-                        GPIO->setval_gpio(true,GPIO->YELLOW_MIDDLE);
                         internet_connection = true;
-                        Log->add("CONNECTION RESTORED");
                         internet_outage = false;
+                        GPIO->setval_gpio(internet_connection,GPIO->YELLOW_MIDDLE);
+                        Log->add("CONNECTION RESTORED");
                     }
                     string_list.pop_front();// pops the first element
                 }
@@ -93,8 +92,7 @@ void CERGO_INTERNET::manage_list()
                     {
                         internet_connection = false;
                         internet_outage = true;
-
-                        GPIO->setval_gpio(false,GPIO->YELLOW_MIDDLE);
+                        GPIO->setval_gpio(internet_connection,GPIO->YELLOW_MIDDLE);
                         Log->add("ERROR: COULD NOT SEND STRING");
                     }
                     break;
@@ -102,7 +100,7 @@ void CERGO_INTERNET::manage_list()
             }
             mtx.unlock();
 
-        }
+
     }
 }
 

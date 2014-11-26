@@ -24,7 +24,7 @@ public:
     virtual ~CERGO_INTERNET();
 
 
-    void set_check_archive(std::atomic<bool> & CHECK_ARCHIVE_BOOL)
+    void set_check_archive(std::atomic_bool & CHECK_ARCHIVE_BOOL)
     {
         check_archive.store(CHECK_ARCHIVE_BOOL,std::memory_order_release);
     }

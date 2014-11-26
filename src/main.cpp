@@ -117,7 +117,6 @@ int main(int argc, char *argv[])
             {
                 GPS->packatize();
 
-                Internet->set_check_archive(true_atomic);
                 GPIO->pulse_light(LIGHT_TIMER,GPIO->GREEN_LEFT);
                 if(DEBUG_LEVEL >= HIGH)
                 {
