@@ -73,7 +73,7 @@ int CERGO_GPS::ubx_checksum(std::deque <uint8_t> & data_list)
 {
     uint8_t ck_a = 0;
     uint8_t ck_b = 0;
-    uint8_t UBX_length_hi = 0;
+    int UBX_length_hi = 0;
     auto data_iterator = data_list.begin();//sets the data iterator to the beginging of the list
     if(data_iterator != data_list.end())// moves one forward
     {
@@ -114,6 +114,8 @@ int CERGO_GPS::ubx_checksum(std::deque <uint8_t> & data_list)
     if(data_iterator != data_list.end())
     {
         UBX_length_hi = *data_iterator;// grabs the length
+        if(UBX_length_hi > 75)
+        {return false;}
     }
     else
     {
@@ -122,7 +124,8 @@ int CERGO_GPS::ubx_checksum(std::deque <uint8_t> & data_list)
 
     data_iterator = data_list.begin();//resets the iterator
     data_iterator += 2;
-    for(uint8_t i = 0 ; i <  (UBX_length_hi + 4) ; i++) //preforms the checksum!
+
+    for(int i = 0 ; i <  (UBX_length_hi + 4) ; i++) //preforms the checksum!
     {
         if(data_iterator != data_list.end())
         {
