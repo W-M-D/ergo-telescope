@@ -351,25 +351,47 @@ int CERGO_SERIAL::read_config_file(std::string file_name)
   }
 }
 
-int CERGO_SERIAL::parse_config_file_line(std::string raw_line)
+
+int CERGO_SERIAL::parse_config_file_line(std::string raw_line, std::deque< uint8_t >& command_hex_data)
 {
     std::string command_name = ""; 
     std::string command_data = "";
-    if(!line.empty())
+    if(!raw_line.empty())
     {
-      std::size_t pos = line.find("-"); 
-      command_name = line.substr(0,pos);
-      command_data = line.substr(pos + 1);
-    }
-    std::size_t space_pos = command_data.find_first_of(' '); 
-    while(space_pos != std::string::npos)
-    {
-      command_data[space_pos]=" 0x";
-      std::size_t space_pos = command_data.find_first_of(' ',space_pos+1); 
+      std::size_t pos = raw_line.find('-');
+      std::size_t space_pos = raw_line.find_first_of(' ',pos);
+      command_name = raw_line.substr(0,space_pos);
+      pos = raw_line.find_first_of('-',pos + 1); 
+      command_data = raw_line.substr(pos + 1);
     }
     
+    std::cout << command_name  <<  command_data << std::endl; 
+    std::size_t space_pos = 0; 
+    while(space_pos <= command_data.size())
+    {
+      command_data.insert(space_pos+1,"0x");
+      space_pos = command_data.find_first_of(' ',space_pos+4); 
+    }
+
+    std::stringstream ss(command_data); // Insert the string into a stream
+
+    std::vector<std::string> tokens;
+    std::string buf; 
+    while (ss >> buf)
+    {
+        tokens.push_back(buf);
+    }
+    
+    for(int i = 0;i < tokens.size();i++)
+    { 
+    uint8_t hex_value = std::stoi (tokens[i],nullptr,0);
+    command_hex_data.emplace_back(hex_value);
+    }
+    return 1;
 }
-int generate_checksum(std::deque <uint8_t> & data_list)
+
+
+int CERGO_SERIAL::generate_checksum(std::deque <uint8_t> & data_list)
 {
     uint8_t ck_a = 0;
     uint8_t ck_b = 0;
@@ -418,6 +440,7 @@ int generate_checksum(std::deque <uint8_t> & data_list)
     return 1; 
 
 }
+
 int send_config(std::string name, std::deque <uint8_t>);
 
 CERGO_SERIAL::~CERGO_SERIAL()
