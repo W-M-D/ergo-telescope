@@ -123,6 +123,10 @@ int CERGO_SERIAL::data_read (std::deque <uint8_t> & data_list)
     return -1;
 }
 
+CERGO_SERIAL::CERGO_SERIAL()
+{
+
+}
 
 
 void CERGO_SERIAL::serial_setup(int ID)
@@ -137,7 +141,6 @@ void CERGO_SERIAL::serial_setup(int ID)
         int CFG_TM2[] =               {0xB5, 0x62, 0x06, 0x01, 0x08, 0x00, 0x0D, 0x03, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x20, 0x25};
         int CFG_NAV_POSLLH[] = {0xB5, 0x62, 0x06, 0x01, 0x08, 0x00, 0x01, 0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x13, 0xBE };
         int CFG_NAV_SOL[]=        {0xB5, 0x62, 0x06, 0x01, 0x08, 0x00, 0x01, 0x06, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x17, 0xDA};
-
 
 
 
@@ -330,6 +333,45 @@ bool CERGO_SERIAL::getUBX_ACK(int *MSG)
 
 
 
+int CERGO_SERIAL::read_config_file(std::string file_name)
+{
+
+  std::string line;
+  std::ifstream data_in;
+  
+  data_in.open( "/etc/ERGO/GPS.conf");
+  
+  if(is_empty(data_in))
+  {
+    return -1;
+  }
+  while(!data_in.eof())
+  {
+    std::getline(data_in,line);
+  }
+}
+
+int CERGO_SERIAL::parse_config_file_line(std::string raw_line)
+{
+    std::string command_name = ""; 
+    std::string command_data = "";
+    if(!line.empty())
+    {
+      std::size_t pos = line.find("-"); 
+      command_name = line.substr(0,pos);
+      command_data = line.substr(pos + 1);
+    }
+    std::size_t space_pos = command_data.find_first_of(' '); 
+    while(space_pos != std::string::npos)
+    {
+      command_data[space_pos]=" 0x";
+      std::size_t space_pos = command_data.find_first_of(' ',space_pos+1); 
+    }
+    
+}
+
+int generate_checksum(std::deque <uint8_t> &); 
+int send_config(std::string name, std::deque <uint8_t>);
 
 CERGO_SERIAL::~CERGO_SERIAL()
 {

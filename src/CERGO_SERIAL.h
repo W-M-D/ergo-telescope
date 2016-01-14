@@ -33,9 +33,17 @@ public:
     int data_read (std::deque <uint8_t> &);
     void setPinMode(int pinID, int mode);
     void writeFile(int fileID, int value);
+    
+    int read_config_file(std::string file_name);
+    int parse_config_file_line(std::string raw_line);
+    int generate_checksum(std::deque <uint8_t> &); 
+    int send_config(std::string name, std::deque <uint8_t>);
 
 
-
+    bool is_empty(std::ifstream& data_in)
+    {
+	return data_in.peek() == std::ifstream::traits_type::eof();
+    }
 
     virtual ~CERGO_SERIAL();
 protected:
@@ -49,7 +57,12 @@ private:
     int DEBUG_LEVEL;
 
     // struct termios port_options;
-
+    struct ublox_command
+    {
+      std::string command_name;
+      uint8_t CMD_MSG[];
+    };
+    
     CLog * Log;
 
 
