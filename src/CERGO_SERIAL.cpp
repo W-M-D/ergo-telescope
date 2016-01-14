@@ -369,8 +369,55 @@ int CERGO_SERIAL::parse_config_file_line(std::string raw_line)
     }
     
 }
+int generate_checksum(std::deque <uint8_t> & data_list)
+{
+    uint8_t ck_a = 0;
+    uint8_t ck_b = 0;
+    int UBX_length_hi = 0;
+    auto data_iterator = data_list.begin();//sets the data iterator to the beginging of the list
 
-int generate_checksum(std::deque <uint8_t> &); 
+
+    if(data_iterator != data_list.end())//moves one forward
+    {
+        data_iterator++;
+    }
+    else
+    {
+        return 2;
+    }
+
+    if(data_iterator != data_list.end())
+    {
+        UBX_length_hi = *data_iterator;// grabs the length
+        if(UBX_length_hi > 75)
+        {return false;}
+    }
+    else
+    {
+        return 2;
+    }
+
+    data_iterator = data_list.begin();//resets the iterator
+
+    while(data_iterator != data_list.end())
+    {
+        if(data_iterator != data_list.end())
+        {
+            ck_a+=*data_iterator;
+            ck_b+=ck_a;
+            data_iterator++;
+        }
+        else
+        {
+            return 2;
+        }
+    }
+    
+    data_list.emplace_back(ck_a);
+    data_list.emplace_back(ck_b);
+    return 1; 
+
+}
 int send_config(std::string name, std::deque <uint8_t>);
 
 CERGO_SERIAL::~CERGO_SERIAL()
