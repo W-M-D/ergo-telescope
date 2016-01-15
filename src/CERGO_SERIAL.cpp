@@ -184,7 +184,7 @@ void CERGO_SERIAL::serial_setup(int ID)
   {
     int * sending_array; 
     std::deque<uint8_t> config_data; 
-    std::string line;
+    std::string line;	
     std::getline(data_in,line);
     parse_config_file_line(line,config_data);
     generate_checksum(config_data);
