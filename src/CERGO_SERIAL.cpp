@@ -130,55 +130,33 @@ CERGO_SERIAL::CERGO_SERIAL()
 
 
 void CERGO_SERIAL::serial_setup(int ID)
-
 {
-
-    if (ID == 1337)
+  std::ifstream data_in;
+  
+  data_in.open( "/etc/ERGO/GPS.conf");
+  
+  if(is_empty(data_in))
+  {
+    return;
+  }
+  while(!data_in.eof())
+  {
+    int * sending_array; 
+    std::deque<uint8_t> config_data; 
+    std::string line;
+    std::getline(data_in,line);
+    parse_config_file_line(line,config_data);
+    generate_checksum(config_data);
+    config_data.emplace_front(0x62);
+    config_data.emplace_front(0xB5);
+    for(int i =0; i < config_data.size(); i++)
     {
-        int CFG_PRT[] =                {0xB5, 0x62, 0x06, 0x00, 0x14, 0x00, 0x01, 0x00, 0x00, 0x00, 0xD0, 0x08, 0x00, 0x00, 0x00, 0x96, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x8B, 0x54};
-        int CFG_RATE[] =              {0xB5, 0x62, 0x06, 0x08, 0x06, 0x00, 0xC8, 0x00, 0x01, 0x00, 0x01, 0x00, 0xDE, 0x6A};
-        int CFG_PRT2[] =              {0xB5, 0x62, 0x06, 0x00, 0x14, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x27, 0xCE };
-        int CFG_TM2[] =               {0xB5, 0x62, 0x06, 0x01, 0x08, 0x00, 0x0D, 0x03, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x20, 0x25};
-        int CFG_NAV_POSLLH[] = {0xB5, 0x62, 0x06, 0x01, 0x08, 0x00, 0x01, 0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x13, 0xBE };
-        int CFG_NAV_SOL[]=        {0xB5, 0x62, 0x06, 0x01, 0x08, 0x00, 0x01, 0x06, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x17, 0xDA};
-
-
-
-        sendUBX(CFG_PRT,(sizeof(CFG_PRT)/sizeof(int)));
-        Log->add("Sucess:CFG_PRT %s" ,getUBX_ACK(CFG_PRT) ? "true" : "false");
-
-        serial_init(38400);
-
-        sendUBX(CFG_RATE,(sizeof(CFG_RATE)/sizeof(int)));
-        Log->add("Sucess:CFG_RATE %s" ,getUBX_ACK(CFG_RATE) ? "true" : "false");
-
-        sendUBX(CFG_PRT2,(sizeof(CFG_PRT2)/sizeof(int)));
-        Log->add("Sucess:CFG_PRT2 %s" ,getUBX_ACK(CFG_PRT2) ? "true" : "false");
-
-
-        sendUBX(CFG_TM2,(sizeof(CFG_TM2)/sizeof(int)));
-
-        Log->add("Sucess:CFG_TM2 %s" ,getUBX_ACK(CFG_TM2) ? "true" : "false");
-
-
-        sendUBX(CFG_NAV_POSLLH,(sizeof(CFG_NAV_POSLLH)/sizeof(int)));
-        Log->add("Sucess:CFG_NAV_POSLLH %s" ,getUBX_ACK(CFG_NAV_POSLLH) ? "true" : "false");
-
-
-        sendUBX(CFG_NAV_SOL,(sizeof(CFG_NAV_SOL)/sizeof(int)));
-        Log->add("Sucess:CFG_NAV_SOL %s" ,getUBX_ACK(CFG_NAV_SOL) ? "true" : "false");
-
+      sending_array[i] = config_data.at(i);
     }
-
-    if (ID == 247)
-    {
-        int CFG_NAV_POSLLH[] = {0xB5, 0x62, 0x06, 0x03, 0x1C, 0x00, 0x06, 0x03, 0x10, 0x18, 0x14, 0x05, 0x00, 0x3C, 0x3C, 0x14, 0xE8, 0x03, 0x00, 0x00, 0x00, 0x17, 0xFA, 0x00, 0xFA, 0x00, 0x64, 0x00, 0x2C, 0x01, 0x0F, 0x00, 0x00, 0x00, 0x91, 0x54};
-        sendUBX(CFG_NAV_POSLLH,sizeof(CFG_NAV_POSLLH));
-
-
-        Log->add("Sucess: %s" ,getUBX_ACK(CFG_NAV_POSLLH) ? "true" : "false");
-    }
-
+    sendUBX(sending_array,config_data.size());
+    Log->add("Sucess:CFG_PRT %s" ,getUBX_ACK(sending_array) ? "true" : "false");
+  }
+ 
 }
 
 
@@ -333,26 +311,7 @@ bool CERGO_SERIAL::getUBX_ACK(int *MSG)
 
 
 
-int CERGO_SERIAL::read_config_file(std::string file_name)
-{
-
-  std::string line;
-  std::ifstream data_in;
-  
-  data_in.open( "/etc/ERGO/GPS.conf");
-  
-  if(is_empty(data_in))
-  {
-    return -1;
-  }
-  while(!data_in.eof())
-  {
-    std::getline(data_in,line);
-  }
-}
-
-
-int CERGO_SERIAL::parse_config_file_line(std::string raw_line, std::deque< uint8_t >& command_hex_data)
+int CERGO_SERIAL::parse_config_file_line(std::string & raw_line, std::deque< uint8_t >& command_hex_data)
 {
     std::string command_name = ""; 
     std::string command_data = "";
@@ -387,6 +346,7 @@ int CERGO_SERIAL::parse_config_file_line(std::string raw_line, std::deque< uint8
     uint8_t hex_value = std::stoi (tokens[i],nullptr,0);
     command_hex_data.emplace_back(hex_value);
     }
+    raw_line = command_name; 
     return 1;
 }
 

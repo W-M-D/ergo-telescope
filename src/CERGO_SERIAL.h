@@ -15,7 +15,7 @@
 #include <deque>
 #include <sys/poll.h>
 #include <sys/ioctl.h>
-
+#include <vector>
 
 class CERGO_SERIAL
 {
@@ -35,7 +35,7 @@ public:
     void writeFile(int fileID, int value);
     
     int read_config_file(std::string file_name);
-    int parse_config_file_line(std::string raw_line);
+    int parse_config_file_line(std::string & raw_line,std::deque <uint8_t> & command_hex_data);
     int generate_checksum(std::deque <uint8_t> &); 
     int send_config(std::string name, std::deque <uint8_t>);
 
