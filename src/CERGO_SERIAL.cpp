@@ -173,8 +173,7 @@ void CERGO_SERIAL::serial_setup(int ID)
         sendUBX(CFG_NAV_SOL,(sizeof(CFG_NAV_SOL)/sizeof(int)));
         Log->add("Sucess:CFG_NAV_SOL %s" ,getUBX_ACK(CFG_NAV_SOL) ? "true" : "false");
 
-    return;
-  
+ 
   do
   {
     int  sending_array[256] = {0}; 
