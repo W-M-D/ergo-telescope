@@ -173,7 +173,7 @@ void CERGO_SERIAL::serial_setup(int ID)
         sendUBX(CFG_NAV_SOL,(sizeof(CFG_NAV_SOL)/sizeof(int)));
         Log->add("Sucess:CFG_NAV_SOL %s" ,getUBX_ACK(CFG_NAV_SOL) ? "true" : "false");
 
- 
+  
   do
   {
     int  sending_array[256] = {0}; 
@@ -192,7 +192,7 @@ void CERGO_SERIAL::serial_setup(int ID)
       sending_array[i] = config_data.at(i);
     }
     sendUBX(sending_array,config_data.size());
-    Log->add("test : %s" , getUBX_ACK(sending_array) ? "true" : "false");
+    Log->add("%s : %s" ,line.c_str(), (getUBX_ACK(sending_array) ? "true" : "false"));
   }  while(!data_in.eof());
   
 
@@ -364,7 +364,6 @@ int CERGO_SERIAL::parse_config_file_line(std::string & raw_line, std::deque< uin
       command_data = raw_line.substr(pos + 1);
     }
     
-    std::cout << command_name  <<  command_data << std::endl; 
     std::size_t space_pos = 0; 
     while(space_pos <= command_data.size())
     {
