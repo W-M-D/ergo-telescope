@@ -180,13 +180,16 @@ void CERGO_SERIAL::serial_setup(int ID)
 
     return;
   }
-  while(!data_in.eof())
+  do
   {
-    int * sending_array; 
+    int  sending_array[256] = {0}; 
     std::deque<uint8_t> config_data; 
-    std::string line;	
+    std::string line = "";	
     std::getline(data_in,line);
-    parse_config_file_line(line,config_data);
+    if(!line.empty())
+    {
+      parse_config_file_line(line,config_data);
+    }
     generate_checksum(config_data);
     config_data.emplace_front(0x62);
     config_data.emplace_front(0xB5);
@@ -195,8 +198,10 @@ void CERGO_SERIAL::serial_setup(int ID)
       sending_array[i] = config_data.at(i);
     }
     sendUBX(sending_array,config_data.size());
-    Log->add("Sucess:CFG_PRT %s" ,getUBX_ACK(sending_array) ? "true" : "false");
-  }
+    Log->add("%s : %s" , getUBX_ACK(sending_array) ? "true" : "false");
+  }  while(!data_in.eof());
+  
+
  
 }
 
