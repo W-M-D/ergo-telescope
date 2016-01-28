@@ -123,14 +123,22 @@ int CERGO_SERIAL::data_read (std::deque <uint8_t> & data_list)
     return -1;
 }
 
+CERGO_SERIAL::CERGO_SERIAL()
+{
+
+}
 
 
 void CERGO_SERIAL::serial_setup(int ID)
-
 {
-
-    if (ID == 1337)
-    {
+  std::ifstream data_in;
+  
+  data_in.open( "/etc/ERGO/GPS.conf");
+  if(DEBUG_LEVEL >= 3)
+  {
+    Log->add("\n Opening the config file");
+  }
+  
         int CFG_PRT[] =                {0xB5, 0x62, 0x06, 0x00, 0x14, 0x00, 0x01, 0x00, 0x00, 0x00, 0xD0, 0x08, 0x00, 0x00, 0x00, 0x96, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x8B, 0x54};
         int CFG_RATE[] =              {0xB5, 0x62, 0x06, 0x08, 0x06, 0x00, 0xC8, 0x00, 0x01, 0x00, 0x01, 0x00, 0xDE, 0x6A};
         int CFG_PRT2[] =              {0xB5, 0x62, 0x06, 0x00, 0x14, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x27, 0xCE };
@@ -165,17 +173,30 @@ void CERGO_SERIAL::serial_setup(int ID)
         sendUBX(CFG_NAV_SOL,(sizeof(CFG_NAV_SOL)/sizeof(int)));
         Log->add("Sucess:CFG_NAV_SOL %s" ,getUBX_ACK(CFG_NAV_SOL) ? "true" : "false");
 
-    }
-
-    if (ID == 247)
+  
+  do
+  {
+    int  sending_array[256] = {0}; 
+    std::deque<uint8_t> config_data; 
+    std::string line = "";	
+    std::getline(data_in,line);
+    if(!line.empty())
     {
-        int CFG_NAV_POSLLH[] = {0xB5, 0x62, 0x06, 0x03, 0x1C, 0x00, 0x06, 0x03, 0x10, 0x18, 0x14, 0x05, 0x00, 0x3C, 0x3C, 0x14, 0xE8, 0x03, 0x00, 0x00, 0x00, 0x17, 0xFA, 0x00, 0xFA, 0x00, 0x64, 0x00, 0x2C, 0x01, 0x0F, 0x00, 0x00, 0x00, 0x91, 0x54};
-        sendUBX(CFG_NAV_POSLLH,sizeof(CFG_NAV_POSLLH));
-
-
-        Log->add("Sucess: %s" ,getUBX_ACK(CFG_NAV_POSLLH) ? "true" : "false");
+      parse_config_file_line(line,config_data);
     }
+    generate_checksum(config_data);
+    config_data.emplace_front(0x62);
+    config_data.emplace_front(0xB5);
+    for(int i =0; i < config_data.size(); i++)
+    {
+      sending_array[i] = config_data.at(i);
+    }
+    sendUBX(sending_array,config_data.size());
+    Log->add("%s : %s" ,line.c_str(), (getUBX_ACK(sending_array) ? "true" : "false"));
+  }  while(!data_in.eof());
+  
 
+ 
 }
 
 
@@ -330,6 +351,96 @@ bool CERGO_SERIAL::getUBX_ACK(int *MSG)
 
 
 
+int CERGO_SERIAL::parse_config_file_line(std::string & raw_line, std::deque< uint8_t >& command_hex_data)
+{
+    std::string command_name = ""; 
+    std::string command_data = "";
+    if(!raw_line.empty())
+    {
+      std::size_t pos = raw_line.find('-');
+      std::size_t space_pos = raw_line.find_first_of(' ',pos);
+      command_name = raw_line.substr(0,space_pos);
+      pos = raw_line.find_first_of('-',pos + 1); 
+      command_data = raw_line.substr(pos + 1);
+    }
+    
+    std::size_t space_pos = 0; 
+    while(space_pos <= command_data.size())
+    {
+      command_data.insert(space_pos+1,"0x");
+      space_pos = command_data.find_first_of(' ',space_pos+4); 
+    }
+
+    std::stringstream ss(command_data); // Insert the string into a stream
+
+    std::vector<std::string> tokens;
+    std::string buf; 
+    while (ss >> buf)
+    {
+        tokens.push_back(buf);
+    }
+    
+    for(int i = 0;i < tokens.size();i++)
+    { 
+    uint8_t hex_value = std::stoi (tokens[i],nullptr,0);
+    command_hex_data.emplace_back(hex_value);
+    }
+    raw_line = command_name; 
+    return 1;
+}
+
+
+int CERGO_SERIAL::generate_checksum(std::deque <uint8_t> & data_list)
+{
+    uint8_t ck_a = 0;
+    uint8_t ck_b = 0;
+    int UBX_length_hi = 0;
+    auto data_iterator = data_list.begin();//sets the data iterator to the beginging of the list
+
+
+    if(data_iterator != data_list.end())//moves one forward
+    {
+        data_iterator++;
+    }
+    else
+    {
+        return 2;
+    }
+
+    if(data_iterator != data_list.end())
+    {
+        UBX_length_hi = *data_iterator;// grabs the length
+        if(UBX_length_hi > 75)
+        {return false;}
+    }
+    else
+    {
+        return 2;
+    }
+
+    data_iterator = data_list.begin();//resets the iterator
+
+    while(data_iterator != data_list.end())
+    {
+        if(data_iterator != data_list.end())
+        {
+            ck_a+=*data_iterator;
+            ck_b+=ck_a;
+            data_iterator++;
+        }
+        else
+        {
+            return 2;
+        }
+    }
+    
+    data_list.emplace_back(ck_a);
+    data_list.emplace_back(ck_b);
+    return 1; 
+
+}
+
+int send_config(std::string name, std::deque <uint8_t>);
 
 CERGO_SERIAL::~CERGO_SERIAL()
 {
