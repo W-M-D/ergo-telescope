@@ -1,6 +1,21 @@
 # ergo-telescope
 A Linux based program that runs a GPS to track cosmic rays on a raspberry pi. 
 
+#APT
+
+If you don't want to build this from source you can add this line to your /etc/apt/sources.list file
+
+deb http://packages.ergotelescope.org/debian stable/
+
+you also need the key or else apt will not allow you to install the file
+
+curl http://packages.ergotelescope.org/ergo.gpg.key | sudo apt-key add -
+
+Then all you have to do is.
+
+sudo apt-get update && sudo apt-get install ergo-telescope
+
+
 #Building
 If you would just like to build a bin file for testing it's farily straightforward.
 
@@ -45,21 +60,5 @@ A data stamp will look like this
 Date    Time      ID    lat       lon       alt       nanoseconds 
 
 11/25/14 19:32:41 442 +092365181 -289141422 -0002102 651011889
-
-#APT
-
-If you don't want to build this from source you can add this line to your /etc/apt/sources.list file
-
-deb http://packages.ergotelescope.org/debian stable/
-
-you also need the key or else apt will not allow you to install the file
-
-curl http://packages.ergotelescope.org/ergo.gpg.key | sudo apt-key add -
-
-Then all you have to do is.
-
-sudo apt-get update && sudo apt-get install ergo-telescope
-
-
 
 
