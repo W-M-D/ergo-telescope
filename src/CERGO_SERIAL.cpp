@@ -133,11 +133,7 @@ void CERGO_SERIAL::serial_setup(int ID)
 {
   std::ifstream data_in;
   
-  data_in.open( "/etc/ERGO/GPS.conf");
-  if(DEBUG_LEVEL >= 3)
-  {
-    Log->add("\n Opening the config file");
-  }
+
   
         int CFG_PRT[] =                {0xB5, 0x62, 0x06, 0x00, 0x14, 0x00, 0x01, 0x00, 0x00, 0x00, 0xD0, 0x08, 0x00, 0x00, 0x00, 0x96, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x8B, 0x54};
         int CFG_RATE[] =              {0xB5, 0x62, 0x06, 0x08, 0x06, 0x00, 0xC8, 0x00, 0x01, 0x00, 0x01, 0x00, 0xDE, 0x6A};
@@ -172,8 +168,13 @@ void CERGO_SERIAL::serial_setup(int ID)
 
         sendUBX(CFG_NAV_SOL,(sizeof(CFG_NAV_SOL)/sizeof(int)));
         Log->add("Sucess:CFG_NAV_SOL %s" ,getUBX_ACK(CFG_NAV_SOL) ? "true" : "false");
-
   
+  if(DEBUG_LEVEL >= 3)
+  {
+    Log->add("\n Opening the config file");
+  }
+  if(data_in.open( "/etc/ERGO/GPS.conf"))
+  {
   do
   {
     int  sending_array[256] = {0}; 
@@ -194,8 +195,12 @@ void CERGO_SERIAL::serial_setup(int ID)
     sendUBX(sending_array,config_data.size());
     Log->add("%s : %s" ,line.c_str(), (getUBX_ACK(sending_array) ? "true" : "false"));
   }  while(!data_in.eof());
+  }
+  else
+  {
+    Log->add("GPS.conf does not exist, You may add a UBLOX config file and rename it otherwise only default config will be used");
+  }
   
-
  
 }
 
