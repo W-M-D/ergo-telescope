@@ -184,8 +184,7 @@ void CERGO_SERIAL::serial_setup(int ID)
     std::getline(data_in,line);
     if(!line.empty())
     {
-      parse_config_file_line(line,config_data);
-    }
+    parse_config_file_line(line,config_data);
     generate_checksum(config_data);
     config_data.emplace_front(0x62);
     config_data.emplace_front(0xB5);
@@ -195,6 +194,7 @@ void CERGO_SERIAL::serial_setup(int ID)
     }
     sendUBX(sending_array,config_data.size());
     Log->add("%s : %s" ,line.c_str(), (getUBX_ACK(sending_array) ? "true" : "false"));
+    }
   } 
   }
   else
