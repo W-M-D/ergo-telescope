@@ -176,7 +176,7 @@ void CERGO_SERIAL::serial_setup(int ID)
   data_in.open( "/etc/ERGO/GPS.conf");
   if(!Log->is_empty(data_in))
   {
-  do
+  while(!data_in.eof())
   {
     int  sending_array[256] = {0}; 
     std::deque<uint8_t> config_data; 
@@ -195,7 +195,7 @@ void CERGO_SERIAL::serial_setup(int ID)
     }
     sendUBX(sending_array,config_data.size());
     Log->add("%s : %s" ,line.c_str(), (getUBX_ACK(sending_array) ? "true" : "false"));
-  }  while(!data_in.eof());
+  } 
   }
   else
   {
