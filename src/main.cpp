@@ -52,10 +52,21 @@ static void sig_handler (int );
 int main(int argc, char *argv[])
 {
     int DEBUG_LEVEL = 0;
-    if(argc >= 2)
+    char *config_file = NULL;    
+    
+    while ((opt = getopt(argc, argv, "d:c:")) != -1) {
+    switch(opt)
     {
-        DEBUG_LEVEL = atoi(argv[1]);
+      case d:
+	DEBUG_LEVEL = optarg;
+      break;
+      
+      case c:
+	  config_file = optarg;
+      break;
+      
     }
+    
     CLog * Log = new CLog; //inits the log
     CERGO_SERIAL * Serial = new CERGO_SERIAL(DEBUG_LEVEL) ; // inits the Serial class
     CERGO_GPS * GPS = new CERGO_GPS(DEBUG_LEVEL); // inits the GPS CLASS
