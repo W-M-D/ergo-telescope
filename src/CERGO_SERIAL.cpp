@@ -174,7 +174,7 @@ void CERGO_SERIAL::serial_setup(int ID)
     Log->add("\n Opening the config file");
   }
   data_in.open( "/etc/ERGO/GPS.conf");
-  if(Log->is_empty(data_in))
+  if(!Log->is_empty(data_in))
   {
   do
   {
