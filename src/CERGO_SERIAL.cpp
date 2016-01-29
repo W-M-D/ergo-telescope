@@ -254,7 +254,7 @@ void CERGO_SERIAL::sendUBX(int *MSG,size_t len)
 
 bool CERGO_SERIAL::getUBX_ACK(int *MSG)
 {
-    int serial_timeout = 5;
+    int serial_timeout = 50;
     int ackByteID = 0;
     int ackPacket[10];
     clock_t start_clock = clock();
