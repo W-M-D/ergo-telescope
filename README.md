@@ -36,8 +36,10 @@ a .deb file will be created and can be installed with
 dpkg -i 
 
 #Configuration 
+As of version 1.2
 To configure the raspi to your needs you can create a GPS.conf file with ucenter (https://www.u-blox.com/en/product/u-center-windows)
 and move it to /etc/ERGO/GPS.conf 
+If no GPS.conf is found the progrm will only use default setting. 
 
 the baudrate must be 38400 for the raspi to work. 
 
