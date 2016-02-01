@@ -39,9 +39,11 @@ void CLog::data_add(std::string & date, std::string & time, std::string & unit_i
 
 void CLog::raw_hex_add(std::deque <uint8_t> & data_list)
 {
+
     std::deque <uint8_t> print_list;
     std::ofstream hex_file;
     std::stringstream data_stream;
+    std::string temp_string = "";
     print_list = data_list;
     hex_file.open("/etc/ERGO/ERGO_HEX.log",std::ios_base::out | std::ios_base::app);
     data_stream.flags(std::ios::hex | std::ios::showbase);
@@ -50,8 +52,10 @@ void CLog::raw_hex_add(std::deque <uint8_t> & data_list)
         data_stream << print_list.front() << " ";
         print_list.pop_front();
     }
-    hex_file << data_stream;
+    temp_string = data_stream.str();
+    hex_file << temp_string;
     hex_file.close();
+   
 }
 // This function grabs the file offset of the last line that was sent.
 std::streamoff CLog::last_sent_line_get()
