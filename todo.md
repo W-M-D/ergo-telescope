@@ -1,6 +1,7 @@
 ### TODO- features
 - [x] Configuration loading
 - [ ] Create user for the ergo-telescope deamon to provide restricted permissions 
+- [ ] ? Psad and firewall config ? 
 - [ ] Encryption between pis and server
 - [ ] Compression of local data on the pis
 - [ ] Default configuration file as well as a aviation config file 
