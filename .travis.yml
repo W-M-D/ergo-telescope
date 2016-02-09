@@ -1,1 +1,3 @@
+before_install:
+	- autoreconf
 language: cpp
