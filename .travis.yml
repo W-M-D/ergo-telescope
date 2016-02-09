@@ -1,2 +1,2 @@
 language: cpp
-before_install:autoreconf
+before_install: autoreconf
