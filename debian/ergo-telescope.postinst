@@ -20,17 +20,28 @@ set -e
 
 case "$1" in
     configure)
+		if [ -f /boot/cmdline.txt];
+			 then
+				echo "removing references of ttyAMA0 from /boot/cmdline.txt and backingup old cmdline.txt"
+				mv /boot/cmdline.txt /boot/cmdline.bak
+				sed 's/\S*\(ttyAMA0\)\S*//g' /boot/cmdline.bak > /boot/cmdline.txt
+				echo "done"
+			else 
+				echo "Could not find /boot/cmdline.txt " 
+		fi 
 
-                echo "removing references of ttyAMA0 from /boot/cmdline.txt and backingup old cmdline.txt"
-                mv /boot/cmdline.txt /boot/cmdline.bak
-                sed 's/\S*\(ttyAMA0\)\S*//g' /boot/cmdline.bak > /boot/cmdline.txt
-                echo "done"
-
-                echo "removing references of ttyAMA0 from /etc/inittab and backing up old inittab"
-                mv /etc/inittab /etc/inittab.bak
-                sed '/ttyAMA0/d' /etc/inittab.bak > /etc/inittab
-                echo "done"
-
+		if [ -f /etc/inittab ];
+			then
+				echo "removing references of ttyAMA0 from /etc/inittab and backing up old inittab"
+				mv /etc/inittab /etc/inittab.bak
+				sed '/ttyAMA0/d' /etc/inittab.bak > /etc/inittab
+				echo "done"
+			else
+				echo "Could not find /etc/inittab"
+		fi	
+		
+		useradd  -c "A limited user for ergo-telescope" -g dialout ergod	
+		chown -R ergo /etc/ERGO/
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
