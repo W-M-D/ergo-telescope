@@ -20,7 +20,7 @@ set -e
 
 case "$1" in
     configure)
-		if [ -f /boot/cmdline.txt];
+		if [ -f /boot/cmdline.txt ];
 			 then
 				echo "removing references of ttyAMA0 from /boot/cmdline.txt and backingup old cmdline.txt"
 				mv /boot/cmdline.txt /boot/cmdline.bak
@@ -40,8 +40,10 @@ case "$1" in
 				echo "Could not find /etc/inittab"
 		fi	
 		
-		useradd  -c "A limited user for ergo-telescope" -g dialout ergod	
-		chown -R ergo /etc/ERGO/
+		if useradd  -c "A limited user for ergo-telescope" -g dialout ergod ;
+			then	
+				chown -R ergo /etc/ERGO/
+		fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
