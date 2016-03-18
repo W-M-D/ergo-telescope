@@ -42,7 +42,21 @@ case "$1" in
 		
 		if useradd  -c "A limited user for ergo-telescope" -g dialout ergod ;
 			then	
-				chown -R ergo /etc/ERGO/
+				if [ -f /etc/ERGO/unit_id ];
+					then
+					chown -R ergod /etc/ERGO/
+					if [ -f /etc/ERGO/ERGO_DATA.csv ];
+						then
+						gzip -9 /etc/ERGO/ERGO_DATA.csv
+					fi
+
+					UNIT_ID=$(cat "/etc/ERGO/unit_id")
+					ssh-keygen -b 4096 -f /etc/ERGO/key_$UNIT_ID -C "unit $UNIT_ID" -N ""
+
+					else 
+						echo "NO file under /etc/ERGO/unit_id"
+				fi	
+				
 		fi
     ;;
 
