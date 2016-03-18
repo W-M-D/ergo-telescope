@@ -44,7 +44,6 @@ case "$1" in
 			then	
 				if [ -f /etc/ERGO/unit_id ];
 					then
-					chown -R ergod /etc/ERGO/
 					if [ -f /etc/ERGO/ERGO_DATA.csv ];
 						then
 						gzip -9 /etc/ERGO/ERGO_DATA.csv
@@ -52,6 +51,8 @@ case "$1" in
 
 					UNIT_ID=$(cat "/etc/ERGO/unit_id")
 					ssh-keygen -b 4096 -f /etc/ERGO/key_$UNIT_ID -C "unit $UNIT_ID" -N ""
+
+					chown -R ergod /etc/ERGO/
 
 					else 
 						echo "NO file under /etc/ERGO/unit_id"
