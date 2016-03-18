@@ -50,7 +50,7 @@ case "$1" in
 					fi
 
 					UNIT_ID=$(cat "/etc/ERGO/unit_id")
-					ssh-keygen -b 4096 -f /etc/ERGO/key_$UNIT_ID -C "unit $UNIT_ID" -N ""
+					ssh-keygen -b 4096 -f /etc/ERGO/key_$UNIT_ID -C "$UNIT_ID" -N ""
 
 					chown -R ergod /etc/ERGO/
 
