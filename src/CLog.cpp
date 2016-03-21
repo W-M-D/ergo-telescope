@@ -36,7 +36,7 @@ void CLog::data_add(std::string & date, std::string & time, std::string & unit_i
     uncompressed_string << date << ' ' << time << ' ' << unit_id << ' ' << lat << ' ' << lon << ' ' << alt << ' ' << nanoseconds << '\n';
     
    
-    gzprintf(data_file ,"%s", uncompressed_string.str() );
+    gzprintf(data_file ,"%s", uncompressed_string.str().c_str() );
     gzclose(data_file);
 }
 
