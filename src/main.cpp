@@ -42,7 +42,6 @@
 #include <thread>         // std::thread
 #include "CERGO_SERIAL.h"
 #include "CERGO_GPS.h"
-#include "CERGO_INTERNET.h"
 #include "CERGO_GPIO.h"
 
 void print_list(std::deque <uint8_t> & ,std::string );
@@ -59,7 +58,6 @@ int main(int argc, char *argv[])
     CLog * Log = new CLog; //inits the log
     CERGO_SERIAL * Serial = new CERGO_SERIAL(DEBUG_LEVEL) ; // inits the Serial class
     CERGO_GPS * GPS = new CERGO_GPS(DEBUG_LEVEL); // inits the GPS CLASS
-    CERGO_INTERNET * Internet = new CERGO_INTERNET(DEBUG_LEVEL); // inits the INTERNET class
     CERGO_GPIO * GPIO = new CERGO_GPIO;
     //for(int i = 1; i <=31 ; i++)
     // {
@@ -83,7 +81,6 @@ int main(int argc, char *argv[])
 
     std::deque <uint8_t> data_list; // list to store serial data
     std::stringstream test_string;
-    std::thread ([&] { Internet->manage_list(); }).detach();
 
     while(true) // main management loop
     {
