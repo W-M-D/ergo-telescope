@@ -42,7 +42,7 @@ case "$1" in
 		
 		if useradd  -c "A limited user for ergo-telescope" -g dialout ergod ;
 			then	
-				chown -R ergo /etc/ERGO/
+				chown -R ergod /etc/ERGO/
 		fi
     ;;
 
