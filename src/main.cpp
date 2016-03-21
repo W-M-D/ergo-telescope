@@ -65,6 +65,7 @@ int main(int argc, char *argv[])
     // {
     //    signal(i,sig_handler);
     //  }
+    GPIO->test_lights();
     Log ->add("\n############################################################ \n\n \t\t ERGO-PIXLE RESTARTED \n\n############################################################ \n ");
     std::deque <uint8_t> test_list;
     int data_int = 0;

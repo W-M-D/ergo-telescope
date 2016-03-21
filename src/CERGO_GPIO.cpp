@@ -21,6 +21,17 @@ int CERGO_GPIO::export_gpio(int gpionum)
     setdir_gpio(gpionum);
     return 0;
 }
+void CERGO_GPIO::test_lights()
+{
+  std::chrono::milliseconds LIGHT_TIMER (200);
+  
+  for(int i = 0; i < 10; i++)
+  {
+    pulse_light(LIGHT_TIMER,GREEN_LEFT);
+    pulse_light(LIGHT_TIMER,YELLOW_MIDDLE);
+    pulse_light(LIGHT_TIMER,RED_RIGHT);
+  }
+}
 
 
 int CERGO_GPIO::unexport_gpio(int gpionum)

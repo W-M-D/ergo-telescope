@@ -14,6 +14,7 @@ class CERGO_GPIO
         int setval_gpio(int val,int gpionum);
         int getval_gpio(int gpionum);
         void pulse_light(std::chrono::milliseconds,int light_name);
+	void test_lights();
 
         enum light_colours_t{RED_RIGHT = 24,YELLOW_MIDDLE= 23,GREEN_LEFT=18};
 
