@@ -40,7 +40,7 @@ case "$1" in
 				echo "Could not find /etc/inittab"
 		fi	
 		
-		if useradd  -c "A limited user for ergo-telescope" -g dialout ergod ;
+		if useradd  -c "A limited user for ergo-telescope" -g dialout,gpio ergod ;
 			then	
 				chown -R ergod /etc/ERGO/
 		fi
