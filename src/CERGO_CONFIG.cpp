@@ -41,7 +41,7 @@ int CERGO_CONFIG::load_config_file()
   }
   catch(const SettingNotFoundException &nfex)
   {
-    Log->add("No GPS_config_file_name found in ergo-telescoep.cfg");
+    Log->add("No GPS_config_file_name found in ergo-telescope.cfg");
   }
   
   try
