@@ -1,6 +1,6 @@
 # what flags you want to pass to the C compiler & linker
 CFLAGS = -Wall --std=c++11 -O3
-AM_LDFLAGS = -lcurl -lpthread
+AM_LDFLAGS = -lcurl -lpthread -lconfig++
 
 bin_PROGRAMS = ergo-telescope
 
