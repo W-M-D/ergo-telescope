@@ -161,6 +161,7 @@ std::string CLog::get_time()
     return(time_now.str());
 }
 
+
 CLog::~CLog()
 {
     //dtor

@@ -23,7 +23,6 @@ public:
     std::streamoff last_sent_line_get();
     void reset_last_offset();
     void last_sent_line_save(std::streamoff ls);
-
     void add(const char * text , ...);
     std::string get_time();
 
