@@ -1,2 +1,8 @@
 language: cpp
-before_install: autoreconf
+before_install: 
+	- sudo apt-get install autoconf
+	- autoreconf
+	- sudo apt-get install sudo apt-get install autotools-dev automake mime-support locales  locales-all libsigsegv2 gawk    libmagic1 libreadline6  libconfig++-d   libcurl4-gnutls-dev
+
+
+
