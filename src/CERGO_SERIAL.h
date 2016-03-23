@@ -55,7 +55,7 @@ private:
     struct termios tio;
     uint8_t data_in;
     int DEBUG_LEVEL;
-    std::string CONFIG_FILE_PATH = ""; 
+    std::string CONFIG_FILE_PATH ; 
 
     // struct termios port_options;
     struct ublox_command
