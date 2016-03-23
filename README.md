@@ -17,19 +17,24 @@ sudo apt-get update && sudo apt-get install ergo-telescope
 
 
 #Building
-If you would just like to build a bin file for testing it's farily straightforward.
-
-autoreconf
+If you would just like to build a bin file for testing run
+autoreconf -iv
 ./configure
 make 
 
 If you would like to build a .deb enter the ergo-telescope dir and run 
+autoreconf -iv 
 
-tar -czf ../ergo-telescope_1.1.orig.tar.gz ./* 
+You may have to change the version from 1.4 the current version. 
 
-You may have to change the version from 1.1 to the current version. 
-after the tarball is created just run 
-dpkg-checkbuilddeps && dpkg-buildpackage
+Then run
+
+dpkg-checkbuilddeps 
+
+and install missing build deps with apt-get 
+
+Finally run 
+dpkg-buildpackage
 
 a .deb file will be created and can be installed with 
 
