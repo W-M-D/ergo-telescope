@@ -21,7 +21,7 @@ class CERGO_SERIAL
 {
 public:
 
-    CERGO_SERIAL(int);
+    CERGO_SERIAL(int,std::string config_file_path);
     CERGO_SERIAL();
 
     bool  serial_init(int);
@@ -55,6 +55,7 @@ private:
     struct termios tio;
     uint8_t data_in;
     int DEBUG_LEVEL;
+    std::string CONFIG_FILE_PATH = ""; 
 
     // struct termios port_options;
     struct ublox_command
