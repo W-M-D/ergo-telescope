@@ -8,4 +8,4 @@
 - [ ] Better argument handling 
 
 ### TODO- Bugs
-- [ ] Fix Log timestamp on boot by polling time from GPS before logging
+- [ ] Fix Log timestamp on boot by polling time from GPS before logging (accidently fixed by adding a boot light delay, however the time is still system time so when not on network log messages will not render time correctly)
