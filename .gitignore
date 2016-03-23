@@ -4,4 +4,5 @@
 configure
 missing
 *.o
-
+depcomp
+install-sh
