@@ -16,7 +16,7 @@ int CERGO_CONFIG::load_config_file()
   
   try
   {
-    ergo_telescope_config.readFile(config_file_name.c_str());
+    ergo_telescope_config.readFile(get_config_file_name().c_str());
   }
   catch(const FileIOException &fioex)
   {
