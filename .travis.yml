@@ -5,7 +5,7 @@ before_install:
  - sudo apt-get install autoconf
  - sudo apt-get install autotools-dev automake mime-support locales
  - sudo apt-get install libsigsegv2 gawk libmagic1 libreadline6
- - sudo apt-get isntall aclocal
+ - sudo apt-get install aclocal
  - sudo apt-get install libconfig++-dev libcurl4-gnutls-dev
  - aclocal
  - dpkg-checkbuilddeps
