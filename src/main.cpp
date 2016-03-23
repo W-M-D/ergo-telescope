@@ -53,15 +53,19 @@ static void sig_handler (int );
 
 int main(int argc, char *argv[])
 {
-    libconfig::Config ergo_telescope_config;
     int DEBUG_LEVEL = 0;
     
+    CLog * Log = new CLog; //inits the log
+    CERGO_CONFIG * Config = new CERGO_CONFIG();
     if(argc >= 2)
     {
         DEBUG_LEVEL = atoi(argv[1]);
     }
-    CLog * Log = new CLog; //inits the log
-    CERGO_CONFIG * Config = new CERGO_CONFIG();
+    else
+    {
+      DEBUG_LEVEL = Config->get_debug_level();
+    }
+    
     CERGO_SERIAL * Serial = new CERGO_SERIAL(DEBUG_LEVEL,Config->get_GPS_config_file_name()) ; // inits the Serial class
     CERGO_GPS * GPS = new CERGO_GPS(DEBUG_LEVEL); // inits the GPS CLASS
     CERGO_INTERNET * Internet = new CERGO_INTERNET(DEBUG_LEVEL); // inits the INTERNET class
@@ -71,7 +75,7 @@ int main(int argc, char *argv[])
     //    signal(i,sig_handler);
     //  }
     GPIO->test_lights();
-    Log ->add("\n############################################################ \n\n \t\t ERGO-PIXLE RESTARTED \nVersion=%f Debug level=%d \n############################################################ \n ",Config->get_version_number(),Config->get_debug_level());
+    Log ->add("\n############################################################ \n\n \t\t ERGO-PIXLE RESTARTED \nVersion=%f Debug level=%d \n############################################################ \n ",Config->get_version_number(),DEBUG_LEVEL);
     std::deque <uint8_t> test_list;
     int data_int = 0;
     std::chrono::milliseconds LIGHT_TIMER (100);
