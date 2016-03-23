@@ -33,7 +33,7 @@ int load_config_file();
 private:
     int DEBUG_LEVEL;
     std::string GPS_config_file_name;
-    static ::string config_file_name="/etc/ERGO/ergo-telescope.cfg";
+    static std::string config_file_name="/etc/ERGO/ergo-telescope.cfg";
     double version_number;
     CLog * Log;
 };
