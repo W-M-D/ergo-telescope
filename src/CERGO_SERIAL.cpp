@@ -8,8 +8,9 @@
 #include "CERGO_SERIAL.h"
 static const char* portName = "/dev/ttyAMA0";
 
-CERGO_SERIAL::CERGO_SERIAL(int debug_level)
+CERGO_SERIAL::CERGO_SERIAL(int debug_level ,std::string config_file_path)
 {
+    CONFIG_FILE_PATH = config_file_path;
     DEBUG_LEVEL = debug_level;
     if(DEBUG_LEVEL >= 1)
     {
