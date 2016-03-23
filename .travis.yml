@@ -1,6 +1,7 @@
 ---
 language: cpp
 before_install:
+ - sudo apt-get update
  - sudo apt-get install autoconf
  - autoreconf
  - sudo apt-get install autotools-dev automake mime-support locales  locales-all
