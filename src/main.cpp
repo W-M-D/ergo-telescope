@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     int DEBUG_LEVEL = 0;
     
     CLog * Log = new CLog; //inits the log
-    CERGO_CONFIG * Config = new CERGO_CONFIG();
+    CERGO_CONFIG * Config = new CERGO_CONFIG;
     if(argc >= 2)
     {
         DEBUG_LEVEL = atoi(argv[1]);
