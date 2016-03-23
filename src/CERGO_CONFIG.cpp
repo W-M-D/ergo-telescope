@@ -2,7 +2,7 @@
 
 CERGO_CONFIG::CERGO_CONFIG()
 {
-
+ config_file_name = "ergo-telescope.cfg";
 }
 
 int CERGO_CONFIG::load_config_file()

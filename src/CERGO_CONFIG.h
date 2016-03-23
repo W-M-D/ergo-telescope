@@ -12,7 +12,7 @@ CERGO_CONFIG();
 std::string get_GPS_config_file_name()
 {
   std::string CONFIG_FILE_PATH = "/etc/ERGO";
-  std::string full_config_file_name = CERGO_CONFIG.config_file_name;
+  std::string full_config_file_name = config_file_name;
   full_config_file_name.append(CONFIG_FILE_PATH); 
   return full_config_file_name;
 }
@@ -33,7 +33,7 @@ int load_config_file();
 private:
     int DEBUG_LEVEL;
     std::string GPS_config_file_name;
-    static std::string config_file_name="ergo-telescope.cfg";
+    std::string config_file_name;
     double version_number;
     CLog * Log;
 };
