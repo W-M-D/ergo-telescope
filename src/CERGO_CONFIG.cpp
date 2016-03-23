@@ -3,6 +3,9 @@
 CERGO_CONFIG::CERGO_CONFIG()
 {
  config_file_name = "ergo-telescope.cfg";
+ DEBUG_LEVEL = 0;
+ version_number = 0;
+ 
 }
 
 int CERGO_CONFIG::load_config_file()
