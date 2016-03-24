@@ -1,13 +1,11 @@
----
-language: cpp
-before_install:
- - sudo apt-get update
- - sudo apt-get install autoconf
- - sudo apt-get install autotools-dev automake mime-support locales
- - sudo apt-get install libsigsegv2 gawk libmagic1 libreadline6
- - sudo apt-get install libconfig++-dev libcurl4-gnutls-dev
- - autoreconf -ivf
- - ./configure
+sudo: required
 
- - dpkg-checkbuilddeps
- - dpkg-buildpackage -b
+services:
+  - docker
+
+script:
+  - wget -O- http://travis.debian.net/script.sh | sh -
+
+branches:
+  except:
+    - /^debian\/\d/
