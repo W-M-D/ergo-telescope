@@ -7,4 +7,3 @@ missing
 depcomp
 *debhelper*
 install-sh
-debian/files
