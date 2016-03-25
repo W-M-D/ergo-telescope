@@ -200,7 +200,7 @@ void CERGO_SERIAL::serial_setup(int ID)
   }
   else
   {
-    Log->add("No GPS config file found under the name %s . " , CONFIG_FILE_PATH); 
+    Log->add("No GPS config file found under the name %s . " , CONFIG_FILE_PATH.c_str()); 
   }
   
  
