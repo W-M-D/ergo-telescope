@@ -234,8 +234,7 @@ Info "Removing container"
 docker rm "$(cat ${CIDFILE})" >/dev/null
 rm -f "${CIDFILE}"
 
-Info "Build successful"
-sed -e 's@^@  @g' "../*.changes
+Info "Build successful
 
 #  _                   _          _      _     _                          _
 # | |_ _ __ __ ___   _(_)___   __| | ___| |__ (_) __ _ _ __    _ __   ___| |_
