@@ -2,6 +2,7 @@
 #define CERGO_GPIO_H
 #include "CLog.h"
 #include <thread>
+#include <sys/stat.h>
 #include <chrono>
 class CERGO_GPIO
 {

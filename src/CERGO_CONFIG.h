@@ -11,16 +11,16 @@ CERGO_CONFIG();
 ~CERGO_CONFIG();
 std::string get_GPS_config_file_name()
 {
-  std::string CONFIG_FILE_PATH = "/etc/ERGO";
-  std::string full_config_file_name = GPS_config_file_name;
-  full_config_file_name.append(CONFIG_FILE_PATH); 
+  std::string CONFIG_FILE_PATH = "/etc/ERGO/";
+  std::string full_config_file_name = CONFIG_FILE_PATH;
+  full_config_file_name.append(GPS_config_file_name); 
   return full_config_file_name;
 }
 std::string get_config_file_name()
 {
-  std::string CONFIG_FILE_PATH = "/etc/ERGO";
-  std::string full_config_file_name = config_file_name;
-  full_config_file_name.append(CONFIG_FILE_PATH); 
+  std::string CONFIG_FILE_PATH = "/etc/ERGO/";
+  std::string full_config_file_name = CONFIG_FILE_PATH;
+  full_config_file_name.append(config_file_name); 
   return full_config_file_name;
 }
 

@@ -2,9 +2,13 @@
 
 CERGO_GPIO::CERGO_GPIO()
 {
+    struct stat st;
+    if(stat("/sys/class/gpio",&st) == 0)
+    {
     export_gpio(GREEN_LEFT);//LEFT
     export_gpio(YELLOW_MIDDLE);//MIDDLE
     export_gpio(RED_RIGHT);//RIGHT CLOSEST TO GEIGER COUNTER
+    }
 }
 
 int CERGO_GPIO::export_gpio(int gpionum)
@@ -58,6 +62,8 @@ int CERGO_GPIO::setdir_gpio(int gpionum)
     std::ofstream setdirgpio(setdir_str.str().c_str()); // open direction file for gpio
     if(!setdirgpio.is_open())
     {
+	export_gpio(gpionum);
+	setdir_gpio(gpionum);
         return -1;
     }
 

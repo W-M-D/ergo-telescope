@@ -1,5 +1,5 @@
 # ergo-telescope
-A Linux based program that runs a GPS to track cosmic rays on a raspberry pi. 
+A Linux based program that runs a GPS to track cosmic rays on a raspberry pi (or with some tweaking any other device with a uart port). 
 
 #APT
 

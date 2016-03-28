@@ -174,7 +174,7 @@ void CERGO_SERIAL::serial_setup(int ID)
   {
     Log->add("\n Opening the config file");
   }
-  data_in.open( "/etc/ERGO/GPS.conf");
+  data_in.open( CONFIG_FILE_PATH.c_str());
   if(!Log->is_empty(data_in))
   {
   while(!data_in.eof())
@@ -200,7 +200,7 @@ void CERGO_SERIAL::serial_setup(int ID)
   }
   else
   {
-    Log->add("GPS.conf does not exist or is empty, You may add a UBLOX config file and rename it otherwise only default config will be used");
+    Log->add("No GPS config file found under the name %s . " , CONFIG_FILE_PATH.c_str()); 
   }
   
  
