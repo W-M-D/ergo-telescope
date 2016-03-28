@@ -6,23 +6,9 @@ CERGO_GPIO::CERGO_GPIO()
     struct stat st;
     if(stat(gpio_dir.c_str(),&st) == 1)
     {
-      std::chrono::seconds boot_timer (1);
-      for(int i = 0; i < 10; i++)
-      {
-	if(export_gpio(GREEN_LEFT) == 0)//LEFT
-	{
-	  break;
-	}
-	if(export_gpio(YELLOW_MIDDLE) == 0)//MIDDLE
-	{
-	  break;
-	}
-	if(export_gpio(RED_RIGHT) == 0) //RIGHT CLOSEST TO GEIGER COUNTER
-	{
-	  break;
-	}
-	std::this_thread::sleep_for(boot_timer);
-      }
+	export_gpio(GREEN_LEFT); //LEFT
+	export_gpio(YELLOW_MIDDLE); //MIDDLE
+	export_gpio(RED_RIGHT); //RIGHT CLOSEST TO GEIGER COUNTER
     }
 }
 
@@ -81,6 +67,8 @@ int CERGO_GPIO::setdir_gpio(int gpionum)
     std::ofstream setdirgpio(setdir_str.str().c_str()); // open direction file for gpio
     if(!setdirgpio.is_open())
     {
+	export_gpio(gpionum);
+	setdirgpio(gpionum);
         return -1;
     }
 
