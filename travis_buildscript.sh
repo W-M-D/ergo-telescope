@@ -199,7 +199,7 @@ RUN rm -f Dockerfile
 RUN git checkout .travis.yml || true
 RUN mkdir -p ${TRAVIS_DEBIAN_BUILD_DIR}
 
-CMD dpkg-buildpackage
+CMD autoreconf -iv && dpkg-buildpackage
 EOF
 
 Info "Using Dockerfile:"
@@ -235,7 +235,7 @@ docker rm "$(cat ${CIDFILE})" >/dev/null
 rm -f "${CIDFILE}"
 
 Info "Build successful"
-sed -e 's@^@  @g' "${TRAVIS_DEBIAN_TARGET_DIR}"/*.changes
+sed -e 's@^@  @g' "../*.changes
 
 #  _                   _          _      _     _                          _
 # | |_ _ __ __ ___   _(_)___   __| | ___| |__ (_) __ _ _ __    _ __   ___| |_
