@@ -2,10 +2,30 @@
 
 CERGO_GPIO::CERGO_GPIO()
 {
-    export_gpio(GREEN_LEFT);//LEFT
-    export_gpio(YELLOW_MIDDLE);//MIDDLE
-    export_gpio(RED_RIGHT);//RIGHT CLOSEST TO GEIGER COUNTER
+    struct stat st;
+    if(stat(gpio_dir.c_str(),&st) == 1)
+    {
+      std::chrono::seconds boot_timer = 1;
+      for(int i = 0; i < 10; i++)
+      {
+	if(export_gpio(GREEN_LEFT) == 0)//LEFT
+	{
+	  break;
+	}
+	if(export_gpio(YELLOW_MIDDLE) == 0)//MIDDLE
+	{
+	  break;
+	}
+	if(export_gpio(RED_RIGHT) == 0) //RIGHT CLOSEST TO GEIGER COUNTER
+	{
+	  break;
+	}
+	std::this_thread::sleep_for(boot_timer);
+      }
+    }
 }
+
+
 
 int CERGO_GPIO::export_gpio(int gpionum)
 {
@@ -19,9 +39,9 @@ int CERGO_GPIO::export_gpio(int gpionum)
 
     exportgpio << gpionum ; //write GPIO number to export
     exportgpio.close(); //close export file
-    setdir_gpio(gpionum);
-    return 0;
+    return(setdir_gpio(gpionum));
 }
+
 void CERGO_GPIO::test_lights()
 {
   std::chrono::milliseconds LIGHT_TIMER (200);
@@ -60,9 +80,6 @@ int CERGO_GPIO::setdir_gpio(int gpionum)
     std::ofstream setdirgpio(setdir_str.str().c_str()); // open direction file for gpio
     if(!setdirgpio.is_open())
     {
-	Log->add("Could not set the direction of GPIO%d",gpionum);
-	export_gpio(gpionum);
-	setdir_gpio(gpionum);
         return -1;
     }
 
