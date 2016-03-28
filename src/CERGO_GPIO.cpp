@@ -2,6 +2,7 @@
 
 CERGO_GPIO::CERGO_GPIO()
 {
+    std::string gpio_dir = "/sys/class/gpio/";
     struct stat st;
     if(stat(gpio_dir.c_str(),&st) == 1)
     {
