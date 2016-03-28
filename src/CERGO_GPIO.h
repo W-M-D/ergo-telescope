@@ -27,8 +27,7 @@ class CERGO_GPIO
     protected:
     private:
       CLog * Log;
-      bool GPIO_EXISTS = "false";
-      std::string gpio_dir = "/sys/class/gpio/";
+      static std::string gpio_dir = "/sys/class/gpio/";
 };
 
 #endif // CERGO_GPIO_H
