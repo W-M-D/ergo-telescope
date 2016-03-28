@@ -58,6 +58,8 @@ int CERGO_GPIO::setdir_gpio(int gpionum)
     std::ofstream setdirgpio(setdir_str.str().c_str()); // open direction file for gpio
     if(!setdirgpio.is_open())
     {
+	exportgpio(gpionum);
+	setdir_gpio(gpionum);
         return -1;
     }
 
