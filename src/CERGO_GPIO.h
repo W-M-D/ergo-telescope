@@ -23,7 +23,6 @@ class CERGO_GPIO
 	void test_lights();
 
         enum light_colours_t{RED_RIGHT = 24,YELLOW_MIDDLE= 23,GREEN_LEFT=18};
-	enum edge_types{NONE = "none", RISING = "rising", FALLING = "falling",BOTH = "both"};
         virtual ~CERGO_GPIO();
     protected:
     private:
