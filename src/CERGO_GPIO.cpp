@@ -68,7 +68,6 @@ int CERGO_GPIO::setdir_gpio(int gpionum)
     if(!setdirgpio.is_open())
     {
 	export_gpio(gpionum);
-	setdirgpio(gpionum);
         return -1;
     }
 
