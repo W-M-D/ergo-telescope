@@ -13,6 +13,7 @@ int CERGO_GPIO::export_gpio(int gpionum)
     std::ofstream exportgpio(export_str.c_str()); // Open "export" file. Convert C++ string to C string. Required for all Linux pathnames
     if (!exportgpio.is_open())
     {
+	Log->add("Could not open gpio%d for exporting!", gpionum); 
         return -1;
     }
 
@@ -41,6 +42,7 @@ int CERGO_GPIO::unexport_gpio(int gpionum)
     std::ofstream unexportgpio(unexport_str.c_str()); //Open unexport file
     if(!unexportgpio.is_open())
     {
+	Log->add("Could not open gpio%d for exporting!",gpionum);
         return -1;
     }
 
@@ -58,6 +60,7 @@ int CERGO_GPIO::setdir_gpio(int gpionum)
     std::ofstream setdirgpio(setdir_str.str().c_str()); // open direction file for gpio
     if(!setdirgpio.is_open())
     {
+	Log->add("Could not set the direction of GPIO%d",gpionum);
         return -1;
     }
 
@@ -74,6 +77,7 @@ int CERGO_GPIO::setval_gpio(int val,int gpionum)
     std::ofstream setvalgpio(setval_str.str()); // open value file for gpio
     if(!setvalgpio.is_open()) 
     {
+	Log->add("Could not set the value of GPIO%d ",gpionum);
         return -1;
     }
 
@@ -99,6 +103,7 @@ int CERGO_GPIO::getval_gpio(int gpionum)
     std::ifstream getvalgpio(getval_str.str());// open value file for gpio
     if (getvalgpio.is_open())
     {
+	Log->add("Could not get the value of GPIO%d ",gpionum);
         return -1;
     }
 

@@ -21,7 +21,7 @@ class CERGO_GPIO
         virtual ~CERGO_GPIO();
     protected:
     private:
-
+      CLog * Log;
 };
 
 #endif // CERGO_GPIO_H
