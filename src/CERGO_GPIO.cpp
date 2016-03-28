@@ -5,7 +5,7 @@ CERGO_GPIO::CERGO_GPIO()
     struct stat st;
     if(stat(gpio_dir.c_str(),&st) == 1)
     {
-      std::chrono::seconds boot_timer = 1;
+      std::chrono::seconds boot_timer (1);
       for(int i = 0; i < 10; i++)
       {
 	if(export_gpio(GREEN_LEFT) == 0)//LEFT
