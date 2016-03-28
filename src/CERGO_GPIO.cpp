@@ -61,6 +61,8 @@ int CERGO_GPIO::setdir_gpio(int gpionum)
     if(!setdirgpio.is_open())
     {
 	Log->add("Could not set the direction of GPIO%d",gpionum);
+	export_gpio(gpionum);
+	setdir_gpio(gpionum);
         return -1;
     }
 
