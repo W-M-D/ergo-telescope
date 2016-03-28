@@ -199,7 +199,7 @@ RUN rm -f Dockerfile
 RUN git checkout .travis.yml || true
 RUN mkdir -p ${TRAVIS_DEBIAN_BUILD_DIR}
 
-CMD ${TRAVIS_DEBIAN_GIT_BUILDPACKAGE}  
+CMD dpkg-buildpackage
 EOF
 
 Info "Using Dockerfile:"
