@@ -2,7 +2,7 @@
 
 CERGO_GPIO::CERGO_GPIO()
 {
-    struct stat st;
+    struct std::stat st;
     if(stat("/sys/class/gpio",&st) == 0)
     {
     export_gpio(GREEN_LEFT);//LEFT
