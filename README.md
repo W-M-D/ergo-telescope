@@ -1,6 +1,5 @@
-[![Build Status](https://travis-ci.org/W-M-D/ergo-telescope.svg?branch=master)](https://travis-ci.org/W-M-D/ergo-telescope)
 
-# ergo-telescope
+# ergo-telescope [![Build Status](https://travis-ci.org/W-M-D/ergo-telescope.svg?branch=master)](https://travis-ci.org/W-M-D/ergo-telescope)
 A Linux based program that runs a GPS to track cosmic rays on a raspberry pi (or with some tweaking any other device with a uart port). 
 
 ### TODO- features
@@ -37,11 +36,6 @@ autoreconf -iv
 make 
 
 If you would like to build a .deb enter the ergo-telescope dir and run 
-autoreconf -iv 
-
-You may have to change the version from 1.4 the current version. 
-
-Then run
 
 dpkg-checkbuilddeps 
 
