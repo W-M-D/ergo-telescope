@@ -54,12 +54,14 @@ To configure the raspi to your needs you can create a GPS.conf file with ucenter
 and move it to /etc/ERGO/GPS.conf 
 If no GPS.conf is found the progrm will only use default setting. 
 
+As of version 1.4
+To configure the raspi you need to edit the file located under /etc/ERGO/ergo-telescope.cfg and change GPS_config_file = ""; to GPS_config_file = "YOUR_FILENAME_HERE"; We currently ship with GPS_aviation.conf . This file is well suited for tests < 1g (such as a weather ballon).  
+
 the baudrate must be 38400 for the raspi to work. 
 
 #Debugging 
 If any bugs are found please contact me. If you're really bored and want to look for bugs you can open up gdb, or radare2  in a screen
 session after stoping the ergo service with the command sudo service ergo-telescope stop . However I run gperf with almost every build. 
-
 This program does have some built in debugging features that can be activated by running the program directly with a number 1-4 after it 
 (eg ergo-telescope 3) 
 the number increases verbosity.
