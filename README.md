@@ -8,6 +8,7 @@ A Linux based program that runs a GPS to track cosmic rays on a raspberry pi (or
 - [ ] ? Psad and firewall config ? 
 - [ ] Encryption between pis and server (?rsync via ssh with keys and accounts for each pi ? ) 
 - [x] Compression of local data on the pis (not in master due to the fact that the file must be uncompressed to count bytes)
+- [ ] Use of a actual local database instead of just a csv and possible mesh pi network processing/storage 
 - [x] Default configuration file as well as a aviation config file 
 - [ ] Better argument handling 
 
