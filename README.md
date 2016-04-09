@@ -4,6 +4,7 @@ A Linux based program that runs a GPS to track cosmic rays on a raspberry pi (or
 
 ### TODO- features
 - [x] Configuration loading
+- [ ] Find that awesome switching singal handler you had pre git 
 - [x] Create user for the ergo-telescope deamon to provide restricted permissions 
 - [ ] ? Psad and firewall config ? 
 - [ ] Encryption between pis and server (?rsync via ssh with keys and accounts for each pi ? ) 
