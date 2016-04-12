@@ -24,7 +24,7 @@ case "$1" in
 			 then
 				echo "removing references of ttyAMA0 from /boot/cmdline.txt and backingup old cmdline.txt"
 				mv /boot/cmdline.txt /boot/cmdline.bak
-				sed 's/\S*\(ttyAMA0\)\S*//g' /boot/cmdline.bak > /boot/cmdline.txt
+				sed 's/\S*\(ttyAMA0\|serial0\)\S*//g' /boot/cmdline.bak > /boot/cmdline.txt
 				echo "done"
 			else 
 				echo "Could not find /boot/cmdline.txt " 
