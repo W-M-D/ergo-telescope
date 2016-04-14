@@ -142,11 +142,11 @@ void CLog::debug_add(const char * text , ...)
     va_list va_alist;  //formats log and places into buffer
     memset(log_buff, 0, sizeof(log_buff)/sizeof(char));
     va_start ( va_alist, text );
-    vsnprintf( log_buff + strlen( log_buff ),511, text, va_alist );
+    vsnprintf( log_buff + strlen( log_buff ),512, text, va_alist );
     va_end( va_alist );
 
     std::string log_text (log_buff);
-    log_file << get_time() << " " << log_text << std::endl; // prints log
+    log_file << log_text ; // prints log
     log_file.close();
 }
 
