@@ -163,6 +163,7 @@ static void sig_handler (int bar)
 
 void print_list(std::deque <uint8_t> & print_list,std::string type)
 {
+    CLog * Log = new CLog; //inits the log
     Log->debug_add("%s",type.c_str());
     while(!print_list.empty())
     {
