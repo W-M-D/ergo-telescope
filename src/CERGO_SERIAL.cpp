@@ -15,7 +15,7 @@ CERGO_SERIAL::CERGO_SERIAL(int debug_level ,std::string config_file_path)
     if(DEBUG_LEVEL >= 1)
     {
 
-        Log->add("serial port %d \n\n",tty_fd);
+        Log->debug_add("serial port %d \n\n",tty_fd);
 
     }
     while(!serial_init(9600))
@@ -35,14 +35,14 @@ bool CERGO_SERIAL::serial_init(int baud)
 
         if(DEBUG_LEVEL >= 3)
         {
-            Log->add(" reset TTY_FD = %d",tty_fd);
+            Log->debug_add(" reset TTY_FD = %d \n ",tty_fd);
         }
     }
     else
     {
         if(DEBUG_LEVEL >= 3)
         {
-            Log->add("TTY_FD = %d",tty_fd);
+            Log->add("TTY_FD = %d \n ",tty_fd);
         }
     }
 
@@ -96,10 +96,13 @@ bool CERGO_SERIAL::serial_init(int baud)
 
 int CERGO_SERIAL::data_read (std::deque <uint8_t> & data_list)
 {
+    int read_return_val = 0;
+    
     struct pollfd fds[1];
     fds[0].fd = tty_fd;
     fds[0].events = POLLIN ;
     int pollrc = poll( fds, 1,10);
+    
     if (pollrc < 0)
     {
         perror("poll");
@@ -115,12 +118,13 @@ int CERGO_SERIAL::data_read (std::deque <uint8_t> & data_list)
                 for(int i = 0; i < bytes_avail; i++)
                 {
                     uint8_t read_byte = 0;
-                    read(tty_fd, &read_byte,1);
+                    read_return_val = read(tty_fd, &read_byte,1);
                     data_list.emplace_back(read_byte);
                 }
             }
         }
     }
+    Log->debug_add("\n Read %d bytes from serial interface " ,read_return_val );
     return -1;
 }
 
@@ -200,7 +204,14 @@ void CERGO_SERIAL::serial_setup(int ID)
   }
   else
   {
+    
+    if(CONFIG_FILE_PATH == "")
+    {
+      Log->add( "No GPS config file specified in /etc/ERGO/ergo-telescope.cfg");
+    }
     Log->add("No GPS config file found under the name %s . " , CONFIG_FILE_PATH.c_str()); 
+    
+    
   }
   
  
@@ -210,13 +221,14 @@ void CERGO_SERIAL::serial_setup(int ID)
 
 void CERGO_SERIAL::sendUBX(int *MSG,size_t len)
 {
-
+    int write_return_val = 0;
+    
     lseek(tty_fd, 0, SEEK_SET);
 
     if(DEBUG_LEVEL >= 3)
     {
 
-        Log->add("\n\nSENDING BYTES:\n");
+        Log->debug_add("\n\nSENDING BYTES:\n");
 
     }
     for(unsigned int i =0; i < len; i++)
@@ -226,12 +238,13 @@ void CERGO_SERIAL::sendUBX(int *MSG,size_t len)
         if(POLLOUT)
         {
 
-            write(tty_fd,&c,1);
+           write_return_val = write(tty_fd,&c,1);
+	    
 
             if(DEBUG_LEVEL >= 3)
             {
 
-                Log->add("0x%X ",MSG[i]);
+                Log->debug_add("0x%X ",MSG[i]);
 
             }
         }
@@ -242,11 +255,12 @@ void CERGO_SERIAL::sendUBX(int *MSG,size_t len)
 
         }
     }
+    Log->debug_add("Wrote %d out of %d bytes to the interface",write_return_val,len);
 
     if(DEBUG_LEVEL >= 3)
 
     {
-        Log->add("\n\n\n\n");
+        Log->debug_add("\n\n\n\n");
 
     }
 }
@@ -264,7 +278,7 @@ bool CERGO_SERIAL::getUBX_ACK(int *MSG)
 
     if(DEBUG_LEVEL >= 2)
     {
-        Log->add(" * Reading ACK response: ");
+        Log->debug_add(" * Reading ACK response: ");
     }
     // Construct the expected ACK packet
     ackPacket[0] = 0xB5;	// header CPOCMSG[i]MSG[i]MSG[i]C
@@ -297,7 +311,7 @@ bool CERGO_SERIAL::getUBX_ACK(int *MSG)
             if(DEBUG_LEVEL >= 2)
 
             {
-                Log->add(" (SUCCESS!)");
+                Log->debug_add(" (SUCCESS!)\n");
 
             }
             return true;
@@ -311,7 +325,7 @@ bool CERGO_SERIAL::getUBX_ACK(int *MSG)
 
             {
 
-                Log->add(" (FAILED!)");
+                Log->debug_add(" (FAILED!)\n");
 
             }
             return false;
@@ -343,7 +357,7 @@ bool CERGO_SERIAL::getUBX_ACK(int *MSG)
 
             {
 
-                Log->add("0x%X ",data_list.front());
+                Log->debug_add("0x%X ",data_list.front());
 
             }
 
