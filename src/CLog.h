@@ -24,6 +24,7 @@ public:
     void reset_last_offset();
     void last_sent_line_save(std::streamoff ls);
     void add(const char * text , ...);
+    void debug_add(const char * text , ...);
     std::string get_time();
 
     bool is_empty(std::ifstream& pFile);
