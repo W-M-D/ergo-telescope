@@ -97,6 +97,7 @@ bool CERGO_SERIAL::serial_init(int baud)
 int CERGO_SERIAL::data_read (std::deque <uint8_t> & data_list)
 {
     int read_return_val = 0;
+    int bytes_avail = 0;
     
     struct pollfd fds[1];
     fds[0].fd = tty_fd;
@@ -113,7 +114,6 @@ int CERGO_SERIAL::data_read (std::deque <uint8_t> & data_list)
         {
             if( POLLIN)
             {
-                int bytes_avail = 0;
                 ioctl(tty_fd, FIONREAD, &bytes_avail);
                 for(int i = 0; i < bytes_avail; i++)
                 {
@@ -124,7 +124,7 @@ int CERGO_SERIAL::data_read (std::deque <uint8_t> & data_list)
             }
         }
     }
-    Log->debug_add("\n Read %d bytes from serial interface " ,read_return_val );
+    Log->debug_add("\n Read %d bytes out of %d available \n" ,read_return_val, bytes_avail);
     return -1;
 }
 
