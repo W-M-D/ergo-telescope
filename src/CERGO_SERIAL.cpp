@@ -14,7 +14,9 @@ CERGO_SERIAL::CERGO_SERIAL(int debug_level ,std::string config_file_path)
     DEBUG_LEVEL = debug_level;
     if(DEBUG_LEVEL >= 1)
     {
+
         Log->debug_add("serial port %d \n\n",tty_fd);
+
     }
     while(!serial_init(9600))
     {
@@ -95,7 +97,6 @@ bool CERGO_SERIAL::serial_init(int baud)
 int CERGO_SERIAL::data_read (std::deque <uint8_t> & data_list)
 {
     int read_return_val = 0;
-    int bytes_avail = 0;
     
     struct pollfd fds[1];
     fds[0].fd = tty_fd;
@@ -112,21 +113,18 @@ int CERGO_SERIAL::data_read (std::deque <uint8_t> & data_list)
         {
             if( POLLIN)
             {
+                int bytes_avail = 0;
                 ioctl(tty_fd, FIONREAD, &bytes_avail);
                 for(int i = 0; i < bytes_avail; i++)
                 {
-		  if(POLLIN)
-		  {
                     uint8_t read_byte = 0;
-                    read(tty_fd, &read_byte,1);
-		    read_return_val++;
+                    read_return_val = read(tty_fd, &read_byte,1);
                     data_list.emplace_back(read_byte);
-		  }
                 }
             }
         }
     }
-    Log->debug_add("\n Read %d bytes out of %d available \n" ,read_return_val, bytes_avail);
+    Log->debug_add("\n Read %d bytes from serial interface " ,read_return_val );
     return -1;
 }
 
@@ -152,28 +150,28 @@ void CERGO_SERIAL::serial_setup(int ID)
 
 
 
-        write(CFG_PRT,(sizeof(CFG_PRT)/sizeof(int)));
+        send(CFG_PRT,(sizeof(CFG_PRT)/sizeof(int)));
         Log->add("Sucess:CFG_PRT %s" ,getUBX_ACK(CFG_PRT) ? "true" : "false");
 
         serial_init(38400);
 
-        write(CFG_RATE,(sizeof(CFG_RATE)/sizeof(int)));
+        send(CFG_RATE,(sizeof(CFG_RATE)/sizeof(int)));
         Log->add("Sucess:CFG_RATE %s" ,getUBX_ACK(CFG_RATE) ? "true" : "false");
 
-        write(CFG_PRT2,(sizeof(CFG_PRT2)/sizeof(int)));
+        send(CFG_PRT2,(sizeof(CFG_PRT2)/sizeof(int)));
         Log->add("Sucess:CFG_PRT2 %s" ,getUBX_ACK(CFG_PRT2) ? "true" : "false");
 
 
-        write(CFG_TM2,(sizeof(CFG_TM2)/sizeof(int)));
+        send(CFG_TM2,(sizeof(CFG_TM2)/sizeof(int)));
 
         Log->add("Sucess:CFG_TM2 %s" ,getUBX_ACK(CFG_TM2) ? "true" : "false");
 
 
-        write(CFG_NAV_POSLLH,(sizeof(CFG_NAV_POSLLH)/sizeof(int)));
+        send(CFG_NAV_POSLLH,(sizeof(CFG_NAV_POSLLH)/sizeof(int)));
         Log->add("Sucess:CFG_NAV_POSLLH %s" ,getUBX_ACK(CFG_NAV_POSLLH) ? "true" : "false");
 
 
-        write(CFG_NAV_SOL,(sizeof(CFG_NAV_SOL)/sizeof(int)));
+        send(CFG_NAV_SOL,(sizeof(CFG_NAV_SOL)/sizeof(int)));
         Log->add("Sucess:CFG_NAV_SOL %s" ,getUBX_ACK(CFG_NAV_SOL) ? "true" : "false");
   
   if(DEBUG_LEVEL >= 3)
@@ -199,7 +197,7 @@ void CERGO_SERIAL::serial_setup(int ID)
     {
       sending_array[i] = config_data.at(i);
     }
-    write(sending_array,config_data.size());
+    send(sending_array,config_data.size());
     Log->add("%s : %s" ,line.c_str(), (getUBX_ACK(sending_array) ? "true" : "false"));
     }
   } 
@@ -221,12 +219,18 @@ void CERGO_SERIAL::serial_setup(int ID)
 
 
 
-void CERGO_SERIAL::write(int *MSG,size_t len)
+void CERGO_SERIAL::send(int *MSG,size_t len)
 {
     int write_return_val = 0;
     
     lseek(tty_fd, 0, SEEK_SET);
 
+    if(DEBUG_LEVEL >= 3)
+    {
+
+        Log->debug_add("\n\nSENDING BYTES:\n");
+
+    }
     for(unsigned int i =0; i < len; i++)
     {
         uint8_t c = MSG[i];
@@ -234,17 +238,21 @@ void CERGO_SERIAL::write(int *MSG,size_t len)
         if(POLLOUT)
         {
 
-            std::write(tty_fd,&c,1);
-	    write_return_val++;
+           write_return_val = write(tty_fd,&c,1);
 	    
+
             if(DEBUG_LEVEL >= 3)
             {
+
                 Log->debug_add("0x%X ",MSG[i]);
+
             }
         }
         else
         {
+
             i--;
+
         }
     }
     Log->debug_add("Wrote %d out of %d bytes to the interface",write_return_val,len);
