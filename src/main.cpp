@@ -114,14 +114,14 @@ int main(int argc, char *argv[])
             {
                 if(DEBUG_LEVEL >= MEDIUM)
                 {
-                    printf("fix data\n");
+                    Log->debug_add("fix data\n");
                 }
             }
             else if(data_int == POS_DATA)
             {
                 if(DEBUG_LEVEL >= MEDIUM)
                 {
-                    printf("POS DATA\n");
+                    Log->debug_add("POS DATA\n");
                 }
             }
             else if( data_int == TIME_DATA)//sends the serial data to be parsed
@@ -163,11 +163,12 @@ static void sig_handler (int bar)
 
 void print_list(std::deque <uint8_t> & print_list,std::string type)
 {
-    printf("%s",type.c_str());
+    CLog * Log = new CLog; //inits the log
+    Log->debug_add("%s",type.c_str());
     while(!print_list.empty())
     {
-        printf("0x%X ",print_list.front());
+        Log->debug_add("0x%X ",print_list.front());
         print_list.pop_front();
     }
-    printf("\n\n");
+    Log->debug_add("\n\n");
 }

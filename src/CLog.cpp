@@ -132,6 +132,24 @@ bool CLog::is_empty(std::ifstream& data_in)
 }
 
 
+void CLog::debug_add(const char * text , ...)
+{
+    char log_buff[512] ;
+
+    std::ofstream log_file;
+    log_file.open ("/etc/ERGO/ERGO_DEBUG_LOG.log", std::ios_base::out | std::ios_base::app); //creates log
+
+    va_list va_alist;  //formats log and places into buffer
+    memset(log_buff, 0, sizeof(log_buff)/sizeof(char));
+    va_start ( va_alist, text );
+    vsnprintf( log_buff + strlen( log_buff ),512, text, va_alist );
+    va_end( va_alist );
+
+    std::string log_text (log_buff);
+    log_file << log_text ; // prints log
+    log_file.close();
+}
+
 void CLog::add(const char * text , ...)
 {
     char log_buff[512] ;
