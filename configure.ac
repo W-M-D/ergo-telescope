@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.68])
-AC_INIT([ergo-telescope], [1.0], [matthew.d.weger@gmail.com])
+AC_INIT([ergo-telescope], [1.4], [matthew.d.weger@gmail.com])
 AC_CONFIG_SRCDIR([src/main.cpp])
 AM_INIT_AUTOMAKE([foreign])
 AC_CONFIG_HEADERS([config.h])
