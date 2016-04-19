@@ -234,7 +234,7 @@ void CERGO_SERIAL::write(int *MSG,size_t len)
         if(POLLOUT)
         {
 
-            write(tty_fd,&c,1);
+            std::write(tty_fd,&c,1);
 	    write_return_val++;
 	    
             if(DEBUG_LEVEL >= 3)
