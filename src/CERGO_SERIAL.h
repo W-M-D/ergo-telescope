@@ -28,7 +28,7 @@ public:
     void serial_setup(int);
     bool getUBX_ACK(int *);
 
-    void sendUBX(int *,size_t);
+    void write(int *,size_t);
 
     int data_read (std::deque <uint8_t> &);
     void setPinMode(int pinID, int mode);
