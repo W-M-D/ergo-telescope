@@ -105,36 +105,41 @@ int CERGO_SERIAL::data_read (std::deque <uint8_t> & data_list)
     fds[0].events = POLLIN ;
     int pollrc = poll( fds, 1,10);
     
-    if (pollrc < 0)
+    ioctl(tty_fd, FIONREAD, &bytes_avail);
+    
+    if(bytes_avail >= 16)
     {
-        perror("poll");
-    }
-    else if( pollrc > 0)
-    {
-        if( fds[0].revents )
-        {
-            if( POLLIN)
-            {
-                ioctl(tty_fd, FIONREAD, &bytes_avail);
-                for(int i = 0; i < bytes_avail; i++)
-                {
-		  if(POLLIN)
+      if (pollrc < 0)
+      {
+	  perror("poll");
+      }
+      else if( pollrc > 0)
+      {
+	  if( fds[0].revents )
+	  {
+	      if( POLLIN)
+	      {
+		  for(int i = 0; i < bytes_avail; i++)
 		  {
-                    uint8_t read_byte = 0;
-                    read(tty_fd, &read_byte,1);
-		    read_return_val++;
-                    data_list.emplace_back(read_byte);
+		    if(POLLIN)
+		    {
+		      uint8_t read_byte = 0;
+		      read(tty_fd, &read_byte,1);
+		      read_return_val++;
+		      data_list.emplace_back(read_byte);
+		    }
+		    else
+		    {
+		      pollin_failed++;
+		      i--;
+		    }
 		  }
-		  else
-		  {
-		    pollin_failed++;
-		    i--;
-		  }
-                }
-            }
-        }
+	      }
+	  }
+      }
+      Log->debug_add("\n Read %d bytes out of %d available POLLIN failed %d times " ,read_return_val ,bytes_avail ,pollin_failed);
+      return 0;
     }
-    Log->debug_add("\n Read %d bytes out of %d available POLLIN failed %d times " ,read_return_val ,bytes_avail ,pollin_failed);
     return -1;
 }
 
