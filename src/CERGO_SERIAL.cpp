@@ -328,7 +328,7 @@ bool CERGO_SERIAL::getUBX_ACK(int *MSG)
 	      if(DEBUG_LEVEL >= 2)
 
 	      {
-		  Log->debug_add(" SUCCESS within %d seconds \n",);
+		  Log->debug_add(" SUCCESS within %d seconds \n",current_clock);
 
 	      }
 	      return true;
@@ -342,7 +342,7 @@ bool CERGO_SERIAL::getUBX_ACK(int *MSG)
 	      if(DEBUG_LEVEL >= 2)
 
 	      {
-		  Log->debug_add(" FAILED in %d seconds\n",);
+		  Log->debug_add(" FAILED in %d seconds\n",current_clock);
 
 	      }
 	      return false;
