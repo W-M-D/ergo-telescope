@@ -284,6 +284,7 @@ void CERGO_SERIAL::send(int *MSG,size_t len)
 
 bool CERGO_SERIAL::getUBX_ACK(int *MSG)
 {
+    int current_clock = 0;
     int serial_timeout = 5;
     int ackByteID = 0;
     int ackPacket[10];
@@ -327,21 +328,21 @@ bool CERGO_SERIAL::getUBX_ACK(int *MSG)
 	      if(DEBUG_LEVEL >= 2)
 
 	      {
-		  Log->debug_add(" (SUCCESS!)\n");
+		  Log->debug_add(" SUCCESS within %d seconds \n",);
 
 	      }
 	      return true;
 	  }
 
 	  // Make sure data is available to read
-	  if (((clock() - start_clock)/( CLOCKS_PER_SEC / 1000 )) > serial_timeout)
+	  current_clock =((clock() - start_clock)/( CLOCKS_PER_SEC / 1000 ));
+	  if (current_clock > serial_timeout)
 	  {
 
 	      if(DEBUG_LEVEL >= 2)
 
 	      {
-
-		  Log->debug_add(" (FAILED!)\n");
+		  Log->debug_add(" FAILED in %d seconds\n",);
 
 	      }
 	      return false;
