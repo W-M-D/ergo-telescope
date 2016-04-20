@@ -381,6 +381,10 @@ bool CERGO_SERIAL::getUBX_ACK(int *MSG)
 	      data_list.pop_front();
 	  }
 	}
+	else
+	{
+	  start_clock = clock();
+	}
     }
 
 
