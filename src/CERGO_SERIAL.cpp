@@ -138,7 +138,7 @@ int CERGO_SERIAL::data_read (std::deque <uint8_t> & data_list)
 	  }
       }
       Log->debug_add("\n Read %d bytes out of %d available POLLIN failed %d times " ,read_return_val ,bytes_avail ,pollin_failed);
-      return 0;
+      return 1;
     }
     return -1;
 }
@@ -317,69 +317,70 @@ bool CERGO_SERIAL::getUBX_ACK(int *MSG)
 
     while (true)
     {
-        data_read(data_list);
-        // Test for success
-        if (ackByteID > 9)
-        {
-            // All packets in order!
+        if(data_read(data_list))
+	{
+	  // Test for success
+	  if (ackByteID > 9)
+	  {
+	      // All packets in order!
 
-            if(DEBUG_LEVEL >= 2)
+	      if(DEBUG_LEVEL >= 2)
 
-            {
-                Log->debug_add(" (SUCCESS!)\n");
+	      {
+		  Log->debug_add(" (SUCCESS!)\n");
 
-            }
-            return true;
-        }
+	      }
+	      return true;
+	  }
 
-        // Make sure data is available to read
-        if (((clock() - start_clock)/( CLOCKS_PER_SEC / 1000 )) > serial_timeout)
-        {
+	  // Make sure data is available to read
+	  if (((clock() - start_clock)/( CLOCKS_PER_SEC / 1000 )) > serial_timeout)
+	  {
 
-            if(DEBUG_LEVEL >= 2)
+	      if(DEBUG_LEVEL >= 2)
 
-            {
+	      {
 
-                Log->debug_add(" (FAILED!)\n");
+		  Log->debug_add(" (FAILED!)\n");
 
-            }
-            return false;
-        }
+	      }
+	      return false;
+	  }
 
-        // Check that bytes arrive in sequence as per expected ACK packet
+	  // Check that bytes arrive in sequence as per expected ACK packet
 
-        while(!data_list.empty())
+	  while(!data_list.empty())
 
-        {
+	  {
 
-            if(ackByteID > 9)
-            {
-                break;
-            }
+	      if(ackByteID > 9)
+	      {
+		  break;
+	      }
 
-            if (data_list.front() == ackPacket[ackByteID])
-            {
-                ackByteID++;
-            }
-            else
-            {
-                ackByteID = 0;	// Reset and look again, invalid order
-            }
-
-
-
-            if(DEBUG_LEVEL >= 3)
-
-            {
-
-                Log->debug_add("0x%X ",data_list.front());
-
-            }
+	      if (data_list.front() == ackPacket[ackByteID])
+	      {
+		  ackByteID++;
+	      }
+	      else
+	      {
+		  ackByteID = 0;	// Reset and look again, invalid order
+	      }
 
 
-            data_list.pop_front();
-        }
 
+	      if(DEBUG_LEVEL >= 3)
+
+	      {
+
+		  Log->debug_add("0x%X ",data_list.front());
+
+	      }
+
+
+	      data_list.pop_front();
+	  }
+	}
     }
 
 
