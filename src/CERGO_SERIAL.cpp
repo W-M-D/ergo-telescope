@@ -98,6 +98,7 @@ int CERGO_SERIAL::data_read (std::deque <uint8_t> & data_list)
 {
     int read_return_val = 0;
     int bytes_avail = 0;
+    int pollin_failed = 0;
     
     struct pollfd fds[1];
     fds[0].fd = tty_fd;
@@ -126,13 +127,14 @@ int CERGO_SERIAL::data_read (std::deque <uint8_t> & data_list)
 		  }
 		  else
 		  {
+		    pollin_failed++;
 		    i--;
 		  }
                 }
             }
         }
     }
-    Log->debug_add("\n Read %d bytes out of %d available" ,read_return_val ,bytes_avail );
+    Log->debug_add("\n Read %d bytes out of %d available POLLIN failed %d times " ,read_return_val ,bytes_avail ,pollin_failed);
     return -1;
 }
 
@@ -230,6 +232,7 @@ void CERGO_SERIAL::serial_setup(int ID)
 void CERGO_SERIAL::send(int *MSG,size_t len)
 {
     int write_return_val = 0;
+    int pollout_failed = 0;
     
     lseek(tty_fd, 0, SEEK_SET);
 
@@ -246,8 +249,8 @@ void CERGO_SERIAL::send(int *MSG,size_t len)
         if(POLLOUT)
         {
 
-           write_return_val = write(tty_fd,&c,1);
-	    
+           write(tty_fd,&c,1);
+	   write_return_val++;
 
             if(DEBUG_LEVEL >= 3)
             {
@@ -258,12 +261,11 @@ void CERGO_SERIAL::send(int *MSG,size_t len)
         }
         else
         {
-
+	    pollout_failed++;
             i--;
-
         }
     }
-    Log->debug_add("Wrote %d out of %d bytes to the interface",write_return_val,len);
+    Log->debug_add("Wrote %d out of %d bytes to the interface pollout failed %d times",write_return_val,len,pollout_failed);
 
     if(DEBUG_LEVEL >= 3)
 
