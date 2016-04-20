@@ -117,9 +117,12 @@ int CERGO_SERIAL::data_read (std::deque <uint8_t> & data_list)
                 ioctl(tty_fd, FIONREAD, &bytes_avail);
                 for(int i = 0; i < bytes_avail; i++)
                 {
+		  if(POLLIN)
+		  {
                     uint8_t read_byte = 0;
                     read_return_val = read(tty_fd, &read_byte,1);
                     data_list.emplace_back(read_byte);
+		  }
                 }
             }
         }
