@@ -315,7 +315,7 @@ bool CERGO_SERIAL::getUBX_ACK(int *MSG)
     }
 
 
-    while (true)
+    for(int i=0;i < 100;i++)
     {
         if(data_read(data_list))
 	{
@@ -386,6 +386,7 @@ bool CERGO_SERIAL::getUBX_ACK(int *MSG)
 	  start_clock = clock();
 	}
     }
+    return -1; // return -1 if no data after 100 tries
 
 
 }
