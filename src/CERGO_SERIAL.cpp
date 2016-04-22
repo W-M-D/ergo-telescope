@@ -272,7 +272,7 @@ void CERGO_SERIAL::send(int *MSG,size_t len)
             i--;
         }
     }
-    Log->debug_add("Wrote %d out of %d bytes to the interface pollout failed %d times",write_return_val,len,pollout_failed);
+    Log->debug_add("Wrote %d out of %d bytes to the interface pollout failed %d times\n",write_return_val,len,pollout_failed);
 
     if(DEBUG_LEVEL >= 3)
 
