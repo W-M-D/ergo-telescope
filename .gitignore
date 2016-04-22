@@ -5,5 +5,6 @@ configure
 missing
 *.o
 depcomp
+buildscript
 *debhelper*
 install-sh
