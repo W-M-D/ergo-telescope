@@ -137,7 +137,10 @@ int CERGO_SERIAL::data_read (std::deque <uint8_t> & data_list)
 	      }
 	  }
       }
-      Log->debug_add("\n Read %d bytes out of %d available POLLIN failed %d times " ,read_return_val ,bytes_avail ,pollin_failed);
+      if(DEBUG_LEVEL >= 1)
+      {
+	Log->debug_add("\n Read %d bytes out of %d available POLLIN failed %d times " ,read_return_val ,bytes_avail ,pollin_failed);
+      }
       return 1;
     }
     return -1;
@@ -272,7 +275,10 @@ void CERGO_SERIAL::send(int *MSG,size_t len)
             i--;
         }
     }
-    Log->debug_add("Wrote %d out of %d bytes to the interface pollout failed %d times\n",write_return_val,len,pollout_failed);
+    if(DEBUG_LEVEL >= 1)
+    {
+      Log->debug_add("Wrote %d out of %d bytes to the interface pollout failed %d times\n",write_return_val,len,pollout_failed);
+    }
 
     if(DEBUG_LEVEL >= 3)
 
