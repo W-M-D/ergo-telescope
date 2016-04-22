@@ -239,7 +239,7 @@ void CERGO_SERIAL::send(int *MSG,size_t len)
     int write_return_val = 0;
     int pollout_failed = 0;
     sleep(2); 
-    tcflush(fd,TCIOFLUSH);//flush before writing
+    tcflush(tty_fd,TCIOFLUSH);//flush before writing
     
 
     lseek(tty_fd, 0, SEEK_SET);
