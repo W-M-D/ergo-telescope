@@ -10,7 +10,7 @@ AC_LANG([C++])
 
 # Checks for programs.
 AC_PROG_CXX
-CXXFLAGS="$CXXFLAGS -std=c++0x"
+CXXFLAGS="$CXXFLAGS -fsanitize=address -std=c++0x"
 
 # Checks for libraries.
 
