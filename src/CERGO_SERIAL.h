@@ -14,6 +14,7 @@
 #include <forward_list>
 #include <deque>
 #include <sys/poll.h>
+#include <inttypes.h>
 #include <sys/ioctl.h>
 #include <vector>
 
@@ -26,8 +27,8 @@ public:
 
     bool  serial_init(int);
     void serial_setup(int);
-    bool getUBX_ACK(int *);
-
+    bool getUBX_ACK(int*);
+    int packet_tester(std::deque <uint8_t> &);
     void send(int *,size_t);
 
     int data_read (std::deque <uint8_t> &);
@@ -37,6 +38,7 @@ public:
     int read_config_file(std::string file_name);
     int parse_config_file_line(std::string & raw_line,std::deque <uint8_t> & command_hex_data);
     int generate_checksum(std::deque <uint8_t> &); 
+    int checkusm_tester(std::deque <uint8_t> &);
     int send_config(std::string name, std::deque <uint8_t>);
 
 

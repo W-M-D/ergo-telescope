@@ -41,7 +41,6 @@
 #include <libconfig.h++>
 #include "CLog.h"
 #include <thread>         // std::thread
-#include "CERGO_SERIAL.h"
 #include "CERGO_GPS.h"
 #include "CERGO_INTERNET.h"
 #include "CERGO_GPIO.h"
@@ -67,8 +66,7 @@ int main(int argc, char *argv[])
       DEBUG_LEVEL = Config->get_debug_level();
     }
     
-    CERGO_SERIAL * Serial = new CERGO_SERIAL(DEBUG_LEVEL,Config->get_GPS_config_file_name()) ; // inits the Serial class
-    CERGO_GPS * GPS = new CERGO_GPS(DEBUG_LEVEL); // inits the GPS CLASS
+    CERGO_GPS * GPS = new CERGO_GPS(DEBUG_LEVEL,Config->get_config_file_name()); // inits the GPS CLASS
     CERGO_INTERNET * Internet = new CERGO_INTERNET(DEBUG_LEVEL); // inits the INTERNET class
     CERGO_GPIO * GPIO = new CERGO_GPIO;
     //for(int i = 1; i <=31 ; i++)
@@ -88,7 +86,6 @@ int main(int argc, char *argv[])
 
     //Adds restarted message to log
 
-    Serial->serial_setup(1337);
     GPIO->setval_gpio(true,GPIO->RED_RIGHT);
 
     std::deque <uint8_t> data_list; // list to store serial data
@@ -98,7 +95,6 @@ int main(int argc, char *argv[])
     while(true) // main management loop
     {
 
-        Serial->data_read(data_list); // checks and reads incomming data
         while(!data_list.empty())
         {
             if(DEBUG_LEVEL >= MEDIUM)

@@ -11,12 +11,12 @@
 #include <deque>
 #include <forward_list>
 #include "CLog.h"
-
+#include "CERGO_SERIAL.h"
 
 class CERGO_GPS
 {
 public:
-    CERGO_GPS(int );
+    CERGO_GPS(int,std::string );
 
 
     ///**************************************///
@@ -80,9 +80,9 @@ private:
 
     long CURRENT_CENTURY;
     CLog * Log;
-
     std::string unitid;
     std::forward_list <std::string> packet_list;
+    CERGO_SERIAL * Serial; 
     int DEBUG_LEVEL;
     bool NewData;
     bool pos_data;

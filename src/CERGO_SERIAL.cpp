@@ -288,114 +288,162 @@ void CERGO_SERIAL::send(int *MSG,size_t len)
     }
 }
 
-
-
-bool CERGO_SERIAL::getUBX_ACK(int *MSG)
+int CERGO_SERIAL::packet_tester(std::deque< uint8_t > & data_list)
 {
-    int current_clock = 0;
+    int test_int = 0;
+    while(!data_list.empty())
+    {
+        if(data_list.front() == 0xB5)//check if front of list == 0xB5
+        {
+            break;
+        }
+        else
+        {
+            data_list.pop_front();
+        }
+    }
+    if(data_list.size() > 3)
+    {
+        if(data_list.at(1) != 0x62)
+        {
+            data_list.pop_front();
+            return 0;
+        }
+    }
+    else
+    {
+        return 2;
+    }
+
+
+    test_int = checkusm_tester(data_list);
+    if(test_int == 1)
+    {
+        data_list.pop_front();
+        data_list.pop_front();
+        return 1;
+    }
+    if(test_int == 0)
+    {
+        data_list.pop_front();//THIS REMOVES THE FRONT BIT ON BAD CHECKSUM SO THE DATA CAN CONTINUE TO BE PARSED.
+        return 0;
+    }
+    if(test_int == 2)
+    {
+
+        return 2;//not long enough please try again !
+    }
+
+    return 0;
+}
+
+int CERGO_SERIAL::checkusm_tester(std::deque< uint8_t > & data_list)
+{
+    uint8_t ck_a = 0;
+    uint8_t ck_b = 0;
+    int UBX_length_hi = 0;
+    auto data_iterator = data_list.begin();//sets the data iterator to the beginging of the list
+    if(data_iterator != data_list.end())// moves one forward
+    {
+        data_iterator++;
+    }
+    else
+    {
+        return 2;
+    }
+
+    if(data_iterator != data_list.end())// moves one forward
+    {
+        data_iterator++;
+    }
+    else
+    {
+        return 2;
+    }
+
+    if(data_iterator != data_list.end())// moves one forward
+    {
+        data_iterator++;
+    }
+    else
+    {
+        return 2;
+    }
+
+    if(data_iterator != data_list.end())//moves one forward
+    {
+        data_iterator++;
+    }
+    else
+    {
+        return 2;
+    }
+
+    if(data_iterator != data_list.end())
+    {
+        UBX_length_hi = *data_iterator;// grabs the length
+        if(UBX_length_hi > 75)
+        {return false;}
+    }
+    else
+    {
+        return 2;
+    }
+
+    data_iterator = data_list.begin();//resets the iterator
+    data_iterator += 2;
+
+    for(int i = 0 ; i <  (UBX_length_hi + 4) ; i++) //preforms the checksum!
+    {
+        if(data_iterator != data_list.end())
+        {
+            ck_a+=*data_iterator;
+            ck_b+=ck_a;
+            data_iterator++;
+        }
+        else
+        {
+            return 2;
+        }
+    }
+
+    if(ck_a == *data_iterator)//checks the checksum
+    {
+        if(data_iterator != data_list.end())
+        {
+            data_iterator++;
+        }
+        else
+        {
+            return 2;
+        }
+        if(ck_b == *data_iterator)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+bool CERGO_SERIAL::getUBX_ACK(int *sent_array)
+{
     int serial_timeout = 5;
     int ackByteID = 0;
-    int ackPacket[10];
     clock_t start_clock = clock();
 
     std::deque <uint8_t> data_list; // list to store serial data
-
-    if(DEBUG_LEVEL >= 2)
-    {
-        Log->debug_add(" * Reading ACK response: ");
-    }
-    // Construct the expected ACK packet
-    ackPacket[0] = 0xB5;	// header CPOCMSG[i]MSG[i]MSG[i]C
-    ackPacket[1] = 0x62;	// header
-    ackPacket[2] = 0x05;	// class
-    ackPacket[3] = 0x01;	// id
-    ackPacket[4] = 0x02;	// length
-    ackPacket[5] = 0x00;
-    ackPacket[6] = MSG[2];	// ACK class
-    ackPacket[7] = MSG[3];	// ACK id
-    ackPacket[8] = 0;		// CK_A
-    ackPacket[9] = 0;		// CK_B
-
-    // Calculate the checksums
-    for (int i=2; i<8; i++)
-    {
-        ackPacket[8] = ackPacket[8] + ackPacket[i];
-        ackPacket[9] = ackPacket[9] + ackPacket[8];
-    }
+    uint8_t packet_header[] = {0xB5,0x62,0x05,0x01,0x02,0x00};
+    std::deque <uint8_t> expected_packet(packet_header,packet_header + sizeof(packet_header)/sizeof(uint8_t)); 
+    
+    expected_packet.emplace_back(sent_array[3]);
+    expected_packet.emplace_back(sent_array[4]);
+    generate_checksum(expected_packet);
+    
+    data_read(data_list);
+    
 
 
-    for(int i=0;i < 100;i++)
-    {
-        if(data_read(data_list))
-	{
-	  // Test for success
-	  if (ackByteID > 9)
-	  {
-	      // All packets in order!
-
-	      if(DEBUG_LEVEL >= 2)
-
-	      {
-		  Log->debug_add(" SUCCESS within %d seconds \n",current_clock);
-
-	      }
-	      return true;
-	  }
-
-	  // Make sure data is available to read
-	  current_clock =((clock() - start_clock)/( CLOCKS_PER_SEC / 1000 ));
-	  if (current_clock > serial_timeout)
-	  {
-
-	      if(DEBUG_LEVEL >= 2)
-
-	      {
-		  Log->debug_add(" FAILED in %d seconds\n",current_clock);
-
-	      }
-	      return false;
-	  }
-
-	  // Check that bytes arrive in sequence as per expected ACK packet
-
-	  while(!data_list.empty())
-
-	  {
-
-	      if(ackByteID > 9)
-	      {
-		  break;
-	      }
-
-	      if (data_list.front() == ackPacket[ackByteID])
-	      {
-		  ackByteID++;
-	      }
-	      else
-	      {
-		  ackByteID = 0;	// Reset and look again, invalid order
-	      }
-
-
-
-	      if(DEBUG_LEVEL >= 3)
-
-	      {
-
-		  Log->debug_add("0x%X ",data_list.front());
-
-	      }
-
-
-	      data_list.pop_front();
-	  }
-	}
-	else
-	{
-	  start_clock = clock();
-	}
-    }
-    return -1; // return -1 if no data after 100 tries
 
 
 }

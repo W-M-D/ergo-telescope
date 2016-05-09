@@ -2,8 +2,9 @@
 #include <cmath>
 #include <unistd.h>
 
-CERGO_GPS::CERGO_GPS(int debug_level)
+CERGO_GPS::CERGO_GPS(int debug_level,std::string config_file_name)
 {
+    Serial = new CERGO_SERIAL(debug_level,config_file_name);
     std::ifstream unit_id_file;
     unit_id_file.open("/etc/ERGO/unit_id");
     getline(unit_id_file,unitid);
@@ -19,143 +20,20 @@ CERGO_GPS::CERGO_GPS(int debug_level)
 
 int CERGO_GPS::Read_data(std::deque<uint8_t> & data_list )
 {
-    int test_int = 0;
-    while(!data_list.empty())
-    {
-        if(data_list.front() == 0xB5)//check if front of list == 0xB5
-        {
-            break;
-        }
-        else
-        {
-            data_list.pop_front();
-        }
-    }
-    if(data_list.size() > 3)
-    {
-        if(data_list.at(1) != 0x62)
-        {
-            data_list.pop_front();
-            return 0;
-        }
-    }
-    else
-    {
-        return 2;
-    }
-
-
-    test_int = ubx_checksum(data_list);
-    if(test_int == 1)
-    {
-        data_list.pop_front();
-        data_list.pop_front();
-        test_int = parse_ubx_gps(data_list);
-        return (test_int);
-    }
-    if(test_int == 0)
-    {
-        data_list.pop_front();//THIS REMOVES THE FRONT BIT ON BAD CHECKSUM SO THE DATA CAN CONTINUE TO BE PARSED.
-        return 0;
-    }
-    if(test_int == 2)
-    {
-
-        return 2;//not long enough please try again !
-    }
-
-    return 0;
+ int test = 0;
+ Serial->data_read(data_list);
+ test = Serial->packet_tester(data_list); 
+ if(test == 1)
+ {
+   return parse_ubx_gps(data_list);
+ }
+ else
+ {
+   return test;
+ }
 }
 
 
-
-int CERGO_GPS::ubx_checksum(std::deque <uint8_t> & data_list)
-{
-    uint8_t ck_a = 0;
-    uint8_t ck_b = 0;
-    int UBX_length_hi = 0;
-    auto data_iterator = data_list.begin();//sets the data iterator to the beginging of the list
-    if(data_iterator != data_list.end())// moves one forward
-    {
-        data_iterator++;
-    }
-    else
-    {
-        return 2;
-    }
-
-    if(data_iterator != data_list.end())// moves one forward
-    {
-        data_iterator++;
-    }
-    else
-    {
-        return 2;
-    }
-
-    if(data_iterator != data_list.end())// moves one forward
-    {
-        data_iterator++;
-    }
-    else
-    {
-        return 2;
-    }
-
-    if(data_iterator != data_list.end())//moves one forward
-    {
-        data_iterator++;
-    }
-    else
-    {
-        return 2;
-    }
-
-    if(data_iterator != data_list.end())
-    {
-        UBX_length_hi = *data_iterator;// grabs the length
-        if(UBX_length_hi > 75)
-        {return false;}
-    }
-    else
-    {
-        return 2;
-    }
-
-    data_iterator = data_list.begin();//resets the iterator
-    data_iterator += 2;
-
-    for(int i = 0 ; i <  (UBX_length_hi + 4) ; i++) //preforms the checksum!
-    {
-        if(data_iterator != data_list.end())
-        {
-            ck_a+=*data_iterator;
-            ck_b+=ck_a;
-            data_iterator++;
-        }
-        else
-        {
-            return 2;
-        }
-    }
-
-    if(ck_a == *data_iterator)//checks the checksum
-    {
-        if(data_iterator != data_list.end())
-        {
-            data_iterator++;
-        }
-        else
-        {
-            return 2;
-        }
-        if(ck_b == *data_iterator)
-        {
-            return true;
-        }
-    }
-    return false;
-}
 
 ///******************************************************************///
 ///PACKETIZING-FUCTIONS
