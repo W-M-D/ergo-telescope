@@ -4,7 +4,7 @@
 # Provides: ergo-telescope
 # Required-Start: $remote_fs $syslog $time
 # Required-Stop: $remote_fs $syslog
-# Default-Start: 2 3 4 5
+# Default-Start: 3 4 5
 # Default-Stop: 0 1 6
 # Short-Description: A deamon that captures logs and sends energetic ray events to the server 
 # Description: Put a long description of the service here
