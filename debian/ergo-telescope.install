@@ -1,2 +1,3 @@
 debian/config-dir/ergo-telescope.cfg		/etc/ERGO/
 debian/config-dir/GPS_aviation.conf		/etc/ERGO/	
+debian/config-dir/GPS_stationary.conf		/etc/ERGO/	

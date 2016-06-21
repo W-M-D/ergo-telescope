@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
     //    signal(i,sig_handler);
     //  }
     GPIO->test_lights();
-    Log ->add("\n############################################################ \n\n \t\t ERGO-PIXLE RESTARTED \nVersion=%f Debug level=%d \n############################################################ \n ",Config->get_version_number(),DEBUG_LEVEL);
+    Log ->add("\n############################################################ \n\n \t\t ERGO-PIXLE RESTARTED \nVersion=%s Debug level=%d \n############################################################ \n ",Config->get_version_number().c_str(),DEBUG_LEVEL);
     std::deque <uint8_t> test_list;
     int data_int = 0;
     std::chrono::milliseconds LIGHT_TIMER (100);
