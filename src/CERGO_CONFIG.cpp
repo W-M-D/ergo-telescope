@@ -4,7 +4,7 @@ CERGO_CONFIG::CERGO_CONFIG()
 {
  config_file_name = "ergo-telescope.cfg";
  DEBUG_LEVEL = 0;
- version_number = 0;
+ version_number = "";
 }
 
 int CERGO_CONFIG::load_config_file()
@@ -30,7 +30,7 @@ int CERGO_CONFIG::load_config_file()
   
   try
   {
-    version_number = ergo_telescope_config.lookup("version_number"); 
+    version_number = ergo_telescope_config.lookup("version_number").c_str(); 
   }
   catch(const SettingNotFoundException &nfex)
   {

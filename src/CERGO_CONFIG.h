@@ -30,7 +30,7 @@ int get_debug_level()
   
 }
 
-double get_version_number()
+std::string get_version_number()
 {
   return version_number;
 }
@@ -41,7 +41,7 @@ private:
     int DEBUG_LEVEL;
     std::string GPS_config_file_name;
     std::string config_file_name;
-    double version_number;
+    std::string version_number;
     CLog * Log;
 };
 
