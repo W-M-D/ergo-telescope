@@ -12,7 +12,7 @@
 class CERGO_INTERNET
 {
 public:
-    CERGO_INTERNET(int);
+    CERGO_INTERNET(int,std::string);
     CERGO_INTERNET();
 
     bool send_string(const std::string & data_string);
@@ -42,6 +42,7 @@ private:
     CERGO_GPIO * GPIO;
     int MAX_INTERNET_TIMEOUT;
     int DEBUG_LEVEL;
+    std::string target_url_string;
 
 };
 

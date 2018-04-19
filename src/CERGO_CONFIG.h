@@ -16,6 +16,7 @@ std::string get_GPS_config_file_name()
   full_config_file_name.append(GPS_config_file_name); 
   return full_config_file_name;
 }
+
 std::string get_config_file_name()
 {
   std::string CONFIG_FILE_PATH = "/etc/ERGO/";
@@ -24,10 +25,14 @@ std::string get_config_file_name()
   return full_config_file_name;
 }
 
+std::string get_target_url()
+{
+  return target_url;
+}
+
 int get_debug_level()
 {
   return DEBUG_LEVEL;
-  
 }
 
 std::string get_version_number()
@@ -42,6 +47,7 @@ private:
     std::string GPS_config_file_name;
     std::string config_file_name;
     std::string version_number;
+    std::string target_url;
     CLog * Log;
 };
 

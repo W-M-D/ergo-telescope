@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
     
     CERGO_SERIAL * Serial = new CERGO_SERIAL(DEBUG_LEVEL,Config->get_GPS_config_file_name()) ; // inits the Serial class
     CERGO_GPS * GPS = new CERGO_GPS(DEBUG_LEVEL); // inits the GPS CLASS
-    CERGO_INTERNET * Internet = new CERGO_INTERNET(DEBUG_LEVEL); // inits the INTERNET class
+    CERGO_INTERNET * Internet = new CERGO_INTERNET(DEBUG_LEVEL,Config->get_target_url().c_str()); // inits the INTERNET class
     CERGO_GPIO * GPIO = new CERGO_GPIO;
     //for(int i = 1; i <=31 ; i++)
     // {

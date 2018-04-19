@@ -5,6 +5,7 @@ CERGO_CONFIG::CERGO_CONFIG()
  config_file_name = "ergo-telescope.cfg";
  DEBUG_LEVEL = 0;
  version_number = "";
+ target_url = "";
 }
 
 int CERGO_CONFIG::load_config_file()
@@ -53,6 +54,15 @@ int CERGO_CONFIG::load_config_file()
   catch(const SettingNotFoundException &nfex)
   {
     Log->add("No debug level found in ergo-telescope.cfg");
+  }
+   
+  try
+  {
+    target_url = ergo_telescope_config.lookup("TARGET_URL").c_str(); 
+  }
+  catch(const SettingNotFoundException &nfex)
+  {
+    Log->add("No target url in config file");
   }
   
   return 1;
