@@ -7,6 +7,8 @@ config.log
 config.status
 *.o
 *.deps*
+autom4te.cache
+ltmain.sh
 depcomp
 buildscript
 *debhelper*
