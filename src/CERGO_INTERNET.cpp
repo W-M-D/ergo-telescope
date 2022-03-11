@@ -1,7 +1,15 @@
 #include "CERGO_INTERNET.h"
 
-CERGO_INTERNET::CERGO_INTERNET(int debug_level)
+CERGO_INTERNET::CERGO_INTERNET(int debug_level,std::string url)
 {
+    if(!url.empty())
+    {
+        this->url_str = "http://ergotelescope.org/postevent3.asp?dta=";
+    }
+    else
+    {
+        this->url_str = url;
+    }
     DEBUG_LEVEL = debug_level;
     MAX_INTERNET_TIMEOUT = 1000;
     first_pass = true;
@@ -25,7 +33,7 @@ bool CERGO_INTERNET::send_string(const std::string & data_string)
     CURL * curl;
     CURLcode res;
     curl = curl_easy_init();
-    std::string sending_string = "http://ergotelescope.org/postevent3.asp?dta=";
+    std::string sending_string = this->url_str;
     sending_string.append(data_string);
 
     if(curl)

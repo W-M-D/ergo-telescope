@@ -35,6 +35,12 @@ std::string get_version_number()
   return version_number;
 }
 
+
+std::string get_server_url()
+{
+    return server_url;
+}
+
 int load_config_file();
 
 private:
@@ -42,6 +48,7 @@ private:
     std::string GPS_config_file_name;
     std::string config_file_name;
     std::string version_number;
+    std::string server_url;
     CLog * Log;
 };
 

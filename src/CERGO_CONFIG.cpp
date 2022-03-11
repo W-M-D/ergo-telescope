@@ -45,6 +45,15 @@ int CERGO_CONFIG::load_config_file()
   {
     Log->add("No GPS_config_file_name found in ergo-telescope.cfg");
   }
+
+  try
+  {
+    server_url = ergo_telescope_config.lookup("SERVER_URL").c_str();
+  }
+  catch(const SettingNotFoundException &nfex)
+  {
+    Log->add("No SERVER_URL found in ergo-telescope.cfg");
+  }
   
   try
   {

@@ -4,6 +4,7 @@
 configure
 missing
 *.o
+*.dep*
 depcomp
 buildscript
 *debhelper*
