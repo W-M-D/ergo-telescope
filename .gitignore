@@ -3,6 +3,8 @@
 *.in
 configure
 missing
+config.log
+config.status
 *.o
 *.deps*
 depcomp
