@@ -1,0 +1,11 @@
+sudo: required
+
+services:
+  - docker
+
+script:
+  - wget -O- https://raw.githubusercontent.com/W-M-D/ergo-telescope/master/travis_buildscript.sh | sh -
+
+branches:
+  except:
+    - /^debian\/\d/

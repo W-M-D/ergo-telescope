@@ -1,0 +1,8 @@
+*.kdev4
+*.m4
+*.in
+*.kate-swp
+configure
+missing
+*.o
+files
