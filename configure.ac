@@ -7,6 +7,8 @@ AC_CONFIG_SRCDIR([src/main.cpp])
 AM_INIT_AUTOMAKE([foreign])
 AC_CONFIG_HEADERS([config.h])
 AC_LANG([C++])
+AC_CONFIG_MACRO_DIRS([m4])
+LT_INIT
 
 # Checks for programs.
 AC_PROG_CXX
