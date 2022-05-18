@@ -1,0 +1,11 @@
+[Unit]
+Description=ERGO Telescope daemon
+[Service]
+User=ergod
+ExecStart=/usr/bin/ergo-telescope
+ExecReload=/bin/kill -HUP $MAINPID
+RestartSec=1
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
