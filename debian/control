@@ -2,7 +2,7 @@ Source: ergo-telescope
 Section: science
 Priority: important
 Maintainer: Matthew Weger <matthew.d.weger@gmail.com>
-Build-Depends: debhelper (>= 9), autotools-dev ,automake, mime-support, locales,  libsigsegv2, gawk, libmagic1, libreadline7 , libconfig++-dev ,libcurl4-gnutls-dev, dh-autoreconf
+Build-Depends: debhelper (>= 9), autotools-dev ,automake, mime-support, locales,  libsigsegv2, gawk, libmagic1, libreadline6 , libconfig++-dev ,libcurl4-gnutls-dev, dh-autoreconf
 Standards-Version: 3.9.5
 Homepage: http://www.ergotelescope.org/
 Vcs-Git: git@github.com:W-M-D/ergo-telescope.git
