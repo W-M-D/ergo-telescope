@@ -28,10 +28,17 @@ CERGO_INTERNET::CERGO_INTERNET()
 }
 
 
+size_t CERGO_INTERNET::write_callback(char *contents, size_t size, size_t nmemb, void *userp)
+{
+    ((std::string*)userp)->append((char*)contents, size * nmemb);
+    return size * nmemb;
+}
+
 bool CERGO_INTERNET::send_string(const std::string & data_string)
 {
     CURL * curl;
     CURLcode res;
+    this->read_string = "";
     curl = curl_easy_init();
     std::string sending_string = this->url_str;
     sending_string.append(data_string);
@@ -44,15 +51,26 @@ bool CERGO_INTERNET::send_string(const std::string & data_string)
         }
         curl_easy_setopt(curl,CURLOPT_NOSIGNAL ,1L );
         curl_easy_setopt(curl,CURLOPT_FAILONERROR,1L );
+        curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,write_callback);
+        curl_easy_setopt(curl,CURLOPT_WRITEDATA,&this->read_string);
 
         curl_easy_setopt(curl, CURLOPT_URL, sending_string.c_str());
         /* Perform the request, res will get the return code */
         res = curl_easy_perform(curl);
+
         /* Check for errors */
         if(res != CURLE_OK)
         {
             curl_easy_cleanup(curl);
             return false;
+        }
+        if(this->read_string.find("error") != std::string::npos )
+        {
+            if(DEBUG_LEVEL >= 1)
+            {
+                Log->add("%s \n",read_string.c_str());
+            }
+            return(false);
         }
 
         /* always cleanup */

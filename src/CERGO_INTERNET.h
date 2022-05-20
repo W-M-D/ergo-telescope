@@ -19,6 +19,8 @@ public:
     void manage_list();
     std::string URLEncode(const char*);
     void reset_internet(clock_t &, int );
+    size_t write_callback(char *contents, size_t size, size_t nmemb, void *userp);
+
 
 
     virtual ~CERGO_INTERNET();
@@ -41,6 +43,7 @@ private:
     CLog * Log;
     CERGO_GPIO * GPIO;
     std::string url_str = "";
+    std::string read_string = "";
     int MAX_INTERNET_TIMEOUT;
     int DEBUG_LEVEL;
 
